@@ -103,4 +103,226 @@
             background: var(--esun-green);
             color: #042f1a;
             border: none;
-            border-radius: 1
+            border-radius: 14px;
+            padding: 0 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .add-btn:active {
+            transform: scale(0.95);
+            opacity: 0.9;
+        }
+
+        /* 列表區塊 */
+        .todo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .todo-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px 18px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .todo-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        /* 精緻打勾控制項 */
+        .checkbox {
+            width: 26px;
+            height: 26px;
+            border: 2px solid #475569;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .todo-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text-main);
+            line-height: 1.4;
+            transition: all 0.2s;
+        }
+
+        /* 完成狀態樣式 */
+        .todo-item.completed {
+            border-color: rgba(16, 185, 129, 0.15);
+            background: rgba(15, 23, 42, 0.35);
+            opacity: 0.5;
+        }
+
+        .todo-item.completed .checkbox {
+            background: var(--esun-green);
+            border-color: var(--esun-green);
+        }
+
+        .todo-item.completed .checkbox::after {
+            content: "✓";
+            color: #042f1a;
+            font-size: 1.1rem;
+            font-weight: 900;
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            color: var(--text-sub);
+        }
+
+        /* 刪除按鈕 */
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #ef4444;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 8px;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+        }
+
+        .delete-btn:active {
+            opacity: 1;
+        }
+
+        /* 深夜關機登出鍵 */
+        .logout-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            padding: 16px 32px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:active {
+            background: rgba(239, 68, 68, 0.2);
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="aurora-bg"></div>
+
+    <div class="container">
+        <header>
+            <h1>🌙 Task Counter</h1>
+            <div class="subtitle">E.SUN 115Q2 · 主辦 IC 戰術檯</div>
+        </header>
+
+        <div class="input-section">
+            <input type="text" id="todo-input" placeholder="新增今晚必做查核項目..." onkeypress="handleKeyPress(event)">
+            <button class="add-btn" onclick="addTodo()">新增</button>
+        </div>
+
+        <div class="todo-list" id="todo-list">
+            </div>
+
+        <div class="logout-section">
+            <button class="logout-btn" onclick="forceShutdown()">⚠️ 大腦強制關機登出</button>
+        </div>
+    </div>
+
+    <script>
+        // 幫主辦 IC 內建的 115Q2 核心任務（完全排除牛肉麵，只留最硬核的科目）
+        const defaultTasks = [
+            "所得稅：核對 DTA/DTL 計算底稿與稅率調整差異",
+            "貼現及放款：看不懂的ECL 減損計提與大額曝險分類",
+            "現金流量表：這數字差異怎麼可以這樣多數字",
+            "IC 職責：確認一年級底稿還要趕進度經理又一直在煩煩煩"
+        ];
+
+        // 讀取進度（如果之前有存過，會自動記錄在手機裡）
+        let todos = JSON.parse(localStorage.getItem("esun_todos"));
+        if (!todos) {
+            todos = defaultTasks.map(task => ({ text: task, completed: false }));
+        }
+
+        function renderTodos() {
+            const listEl = document.getElementById("todo-list");
+            listEl.innerHTML = "";
+
+            todos.forEach((todo, index) => {
+                const item = document.createElement("div");
+                item.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+                
+                item.innerHTML = `
+                    <div class="todo-left" onclick="toggleTodo(${index})">
+                        <div class="checkbox"></div>
+                        <div class="todo-text">${todo.text}</div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteTodo(${index})">✕</button>
+                `;
+                listEl.appendChild(item);
+            });
+
+            // 儲存至手機本地端，重開網頁網格進度不會不見
+            localStorage.setItem("esun_todos", JSON.stringify(todos));
+        }
+
+        function addTodo() {
+            const input = document.getElementById("todo-input");
+            const text = input.value.trim();
+            if (text) {
+                todos.unshift({ text: text, completed: false });
+                input.value = "";
+                renderTodos();
+            }
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === "Enter") addTodo();
+        }
+
+        function toggleTodo(index) {
+            todos[index].completed = !todos[index].completed;
+            renderTodos();
+        }
+
+        function deleteTodo(index) {
+            todos.splice(index, 1);
+            renderTodos();
+        }
+
+        function forceShutdown() {
+            alert("辛苦了！115Q2 帳永遠調不完，但身體要緊。今晚底稿封存，現在立刻登出大腦，關機睡覺！");
+        }
+
+        // 初始渲染
+        renderTodos();
+    </script>
+</body>
+</html>
