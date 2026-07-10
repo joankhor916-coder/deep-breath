@@ -1,21 +1,21 @@
 <div class="container">
     <div class="glow"></div>
     <h1>🌙 Deep Breath</h1>
-    <div class="subtitle">台北深夜·大腦強制斷電系統</div>
+    <div class="subtitle">E.SUN Group 115Q2 · 主辦 IC 斷電系統</div>
     
     <button class="status-btn" onclick="showCoolDown('🥛 負載平衡中', 'milk')">
         <span class="emoji">🥛</span>
-        <span class="btn-text"><strong>負載平衡模式</strong><br><small>數字重影、思線停不下來時</small></span>
+        <span class="btn-text"><strong>主辦思緒負載平衡</strong><br><small>貼現放款數字重影、流量表對不起來時</small></span>
     </button>
     
     <button class="status-btn" onclick="showCoolDown('🍫 心靈減損防禦', 'chocolate')">
         <span class="emoji">🍫</span>
-        <span class="btn-text"><strong>心靈減損防禦</strong><br><small>剛被洗臉、悶到委屈與無力時</small></span>
+        <span class="btn-text"><strong>所得稅魔王防禦</strong><br><small>遞延所得稅、DTA/DTL 算到心力交瘁時</small></span>
     </button>
     
     <button class="status-btn" onclick="showCoolDown('🍢 靈魂流動性修復', 'soup')">
         <span class="emoji">🍢</span>
-        <span class="btn-text"><strong>靈魂流動性修復</strong><br><small>凌晨下班、累到靈魂出竅時</small></span>
+        <span class="btn-text"><strong>IC 責任全面卸載</strong><br><small>扛著整個玉山案件、累到靈魂出竅時</small></span>
     </button>
 </div>
 
@@ -24,7 +24,7 @@
         <h2 id="modal-title">斷電保護啟動</h2>
         <div id="modal-food" class="food-recommend">推薦補給品</div>
         <p id="modal-quote" class="quote">補給碎碎念</p>
-        <button class="close-btn" onclick="closeCoolDown()">好的，深呼吸，去照顧自己</button>
+        <button class="close-btn" onclick="closeCoolDown()">好的主辦，辛苦了，現在關機</button>
     </div>
 </div>
 
@@ -44,11 +44,11 @@ body {
     overflow: hidden;
 }
 .container { text-align: center; max-width: 380px; width: 100%; position: relative; z-index: 2; }
-.glow { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 250px; height: 250px; background: radial-gradient(circle, rgba(14,165,233,0.15) 0%, rgba(0,0,0,0) 75%); pointer-events: none; z-index: -1; }
+.glow { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 250px; height: 250px; background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, rgba(0,0,0,0) 75%); pointer-events: none; z-index: -1; }
 h1 { font-size: 1.8rem; margin-bottom: 8px; color: #f8fafc; font-weight: 600; letter-spacing: 1px; }
-.subtitle { font-size: 0.9rem; color: #64748b; margin-bottom: 40px; letter-spacing: 0.5px; }
+.subtitle { font-size: 0.9rem; color: #10b981; margin-bottom: 40px; letter-spacing: 0.5px; font-weight: 500; }
 .status-btn { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); color: #f1f5f9; border-radius: 24px; padding: 22px 20px; margin: 16px 0; width: 100%; font-size: 1.05rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; box-sizing: border-box; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(0,0,0,0.4); }
-.status-btn:active { transform: scale(0.96); background: rgba(30, 41, 59, 0.7); border-color: #0ea5e9; }
+.status-btn:active { transform: scale(0.96); background: rgba(30, 41, 59, 0.7); border-color: #10b981; }
 .btn-text { text-align: left; flex-grow: 1; margin-left: 18px; }
 .btn-text strong { display: block; font-size: 1.1rem; margin-bottom: 4px; color: #f8fafc; font-weight: 500; }
 .btn-text small { color: #475569; font-size: 0.85rem; }
@@ -56,7 +56,7 @@ h1 { font-size: 1.8rem; margin-bottom: 8px; color: #f8fafc; font-weight: 600; le
 .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 10, 19, 0.96); justify-content: center; align-items: center; z-index: 10; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); animation: fadeIn 0.25s ease; }
 .modal { background: #0f172a; border: 1px solid rgba(255,255,255,0.08); padding: 32px 24px; border-radius: 28px; max-width: 320px; width: 85%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .modal h2 { color: #f8fafc; font-size: 1.35rem; margin-top: 0; font-weight: 600; }
-.food-recommend { background: linear-gradient(135deg, rgba(14,165,233,0.15) 0%, rgba(14,165,233,0.02) 100%); padding: 14px; border-radius: 16px; margin: 20px 0; font-weight: 600; color: #38bdf8; font-size: 1rem; border: 1px solid rgba(14,165,233,0.2); }
+.food-recommend { background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.02) 100%); padding: 14px; border-radius: 16px; margin: 20px 0; font-weight: 600; color: #34d399; font-size: 1rem; border: 1px solid rgba(16,185,129,0.2); }
 .quote { font-size: 0.95rem; color: #94a3b8; line-height: 1.7; margin-bottom: 28px; text-align: justify; min-height: 90px; display: flex; align-items: center; }
 .close-btn { background: #f8fafc; color: #0f172a; border: none; padding: 16px 25px; border-radius: 18px; cursor: pointer; font-weight: 600; width: 100%; font-size: 1rem; transition: all 0.2s; }
 .close-btn:active { transform: scale(0.97); background: #cbd5e1; }
@@ -67,27 +67,27 @@ h1 { font-size: 1.8rem; margin-bottom: 8px; color: #f8fafc; font-weight: 600; le
 <script>
 const db = {
     milk: {
-        food: "超商熱燕麥奶 / 附近星巴克熱拿鐵",
+        food: "超商熱燕麥奶 / 附近星巴克低咖啡因熱拿鐵",
         quotes: [
-            "對齊了一整天的 Level 1 報價與衍生性商品，辛苦你的眼睛和大腦了。走出商辦大樓，信義區的霓虹燈此時此刻都與你無關。聽話，進超商買杯溫熱的燕麥奶，今晚不尋求完美，只尋求內心的平衡。",
-            "民生東路三段的夜風有點涼了。思緒還停留在今天的試算表和財報數字裡嗎？這是正常的。深呼吸，喝口熱奶，讓溫暖把大腦裡跳動的數字重影慢慢融化。今晚的你，已經做得很好了。",
-            "大腦過載的時候，最不需要的就是理智。把緊繃的神經交給熱流吧。不管你在信義區還是民生東路，台北的市場今晚已經睡了，現在是屬於你的負載平衡時間。"
+            "115Q2 的貼現及放款數字是不是又在腦袋裡打轉了？利息收入、ECL 減損計提還有複雜的勾稽關係，你已經核對一整天了。身為主辦 IC，你想把每個細節都盯緊，但現在是深夜，那些大額曝險今晚不會再變了。聽話，喝口熱燕麥奶，把大腦的負載平衡先找回來。",
+            "現金流量表怎麼調就是差那一筆？間接法跟直接法的勾稽讓你快瘋了吧？先停下來。你正在扛著整個玉山大案，緊繃的思緒只會讓盲點更盲。深呼吸，民生東路三段的夜風很冷靜，喝口溫牛奶，今晚不跟現金流量表死磕，天亮了答案自然會浮現。",
+            "從信義區商辦走出來，腦袋裡還在想放款分類和備抵呆帳嗎？作爲這場大審的主辦 IC，你今天對內要 review 記帳、對外要回覆經理，真的辛苦了。大腦已經超載，數字開始重影了，現在強制把利息與數字的開關關掉，喝杯熱奶，此時此刻你只是你自己。"
         ]
     },
     chocolate: {
         food: "微甜黑巧克力 2 片 + 溫水",
         quotes: [
-            "ECL 減損的模型和客戶的無解爭執，消耗了你太多心力。你不需要背負所有人的情緒，客戶的抗拒不是你的錯。吃片巧克力，看看車流，這不是逃避，這是你應得的深夜溫柔。",
-            "今天辛苦了，被洗臉不是因為你不夠好，只是每個人都在打自己的仗。民生東路上的路燈很安靜，讓微苦帶甜的巧克力在舌尖化開，把委屈吞下去，轉化成防禦心靈的護盾。",
-            "那些反覆修改的底稿報告、無理的要求，到此為止了。閉上眼感受巧克力的甜味。台北這座城市很擠，但現在這個角落只屬於你。你受委屈了，休息吧。"
+            "所得稅永遠是金融業的超級大魔王。本期所得稅、遞延所得稅、還有 115Q2 的稅率調整差異，光是看那一堆 DTA/DTL 的計算底稿，就消耗了你大半的靈魂。吃片黑巧克力吧，甜中帶苦的滋味最能安撫被所得稅折磨的心。你已經做得很嚴謹了，不是你的問題。",
+            "一邊要盯緊別人的底稿，一邊還要自己啃最硬的所得稅科目。主辦 IC 的壓力，只有此時舌尖融化的黑巧克力懂。別再去想稅法跟財報的永久性差異了，今晚的防護罩已經啟動，把委屈和緊繃吞下去，轉化成明天的防禦力。",
+            "玉山集團的帳很大、很雜，所得稅更是錯綜複雜。面對反覆修改的稅率調整表，你已經盡了全力。閉上眼睛感受巧克力的香氣，台北這座城市的金融巨輪還在轉，但此時這個深夜的角落，主辦 IC 的職責暫時休假，休息吧。"
         ]
     },
     soup: {
-        food: "超商熱關東煮大根、熱湯 / 24H一蘭拉麵或牛肉麵",
+        food: "超商熱關東煮大根與黑輪熱湯 / 24H 鮮美清湯類點心",
         quotes: [
-            "面對突襲函查或深夜的底稿修正，你就像個用盡燃料的機器。聽話，這時別吃油膩的宵夜傷害身體。進超商買個熱熱的大根，喝兩口熱湯，把積了一整天的疲憊狠狠吐出來。",
-            "從信義區商辦大樓走出來，靈魂是不是有點飄在外面了？如果是，聽話，去威秀附近或開車找碗熱湯。你是一個人撐過這兵荒馬亂的一天的，你真的很了不起。",
-            "底稿、審計、追蹤、趕工...今晚的兵荒馬亂終於結束了。在民生東路三段的深夜裡，去超商盛一碗熱呼呼的關東煮湯，把胃填暖。把工作留在辦公室，今晚你只屬於你自己。"
+            "扛著整個玉山集團案件，115Q2 的成敗全在你的肩膀上。突發的函查、回不完的 mail、還有怎麼都核不完的貼現及放款底稿...你就像個用盡燃料的機器。聽話，不吃油膩的宵夜傷害胃，去超商盛碗熱熱的關東煮湯，把今天扛了一整天的壓力，跟著熱氣狠狠吐出來。",
+            "凌晨下班，從信義區或民生東路走出來，台北的街道好空，主辦 IC 的孤獨感是不是特別重？每個人都對你說『這案子靠你了』，但誰來關心你累不累？去買個溫熱的大根吧，讓熱湯暖暖胃。你是一個人撐過這兵荒馬亂的一天的，你真的很了不起。",
+            "所得稅調完了、現金流量表先卡著、放款底稿明天再說。115Q2 的主辦 IC，今晚的兵荒馬亂到此為止了。喝一碗熱呼呼的關東煮湯，把胃填暖。把玉山集團的底稿留在辦公室，今晚你的靈魂要點擊登出，好好睡一覺。"
         ]
     }
 };
@@ -110,7 +110,6 @@ function showCoolDown(title, category) {
     document.getElementById("overlay").style.display = "flex";
 }
 
-function border() {} 
 function closeCoolDown() {
     document.getElementById("overlay").style.display = "none";
 }
