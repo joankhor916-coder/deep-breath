@@ -1,0 +1,117 @@
+<div class="container">
+    <div class="glow"></div>
+    <h1>🌙 Deep Breath</h1>
+    <div class="subtitle">台北深夜·大腦強制斷電系統</div>
+    
+    <button class="status-btn" onclick="showCoolDown('🥛 負載平衡中', 'milk')">
+        <span class="emoji">🥛</span>
+        <span class="btn-text"><strong>負載平衡模式</strong><br><small>數字重影、思線停不下來時</small></span>
+    </button>
+    
+    <button class="status-btn" onclick="showCoolDown('🍫 心靈減損防禦', 'chocolate')">
+        <span class="emoji">🍫</span>
+        <span class="btn-text"><strong>心靈減損防禦</strong><br><small>剛被洗臉、悶到委屈與無力時</small></span>
+    </button>
+    
+    <button class="status-btn" onclick="showCoolDown('🍢 靈魂流動性修復', 'soup')">
+        <span class="emoji">🍢</span>
+        <span class="btn-text"><strong>靈魂流動性修復</strong><br><small>凌晨下班、累到靈魂出竅時</small></span>
+    </button>
+</div>
+
+<div id="overlay" class="overlay">
+    <div class="modal">
+        <h2 id="modal-title">斷電保護啟動</h2>
+        <div id="modal-food" class="food-recommend">推薦補給品</div>
+        <p id="modal-quote" class="quote">補給碎碎念</p>
+        <button class="close-btn" onclick="closeCoolDown()">好的，深呼吸，去照顧自己</button>
+    </div>
+</div>
+
+<style>
+body { 
+    background-color: #080c14; 
+    color: #e2e8f0; 
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    height: 100vh; 
+    margin: 0; 
+    padding: 24px; 
+    box-sizing: border-box; 
+    overflow: hidden;
+}
+.container { text-align: center; max-width: 380px; width: 100%; position: relative; z-index: 2; }
+.glow { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 250px; height: 250px; background: radial-gradient(circle, rgba(14,165,233,0.15) 0%, rgba(0,0,0,0) 75%); pointer-events: none; z-index: -1; }
+h1 { font-size: 1.8rem; margin-bottom: 8px; color: #f8fafc; font-weight: 600; letter-spacing: 1px; }
+.subtitle { font-size: 0.9rem; color: #64748b; margin-bottom: 40px; letter-spacing: 0.5px; }
+.status-btn { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.05); color: #f1f5f9; border-radius: 24px; padding: 22px 20px; margin: 16px 0; width: 100%; font-size: 1.05rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; box-sizing: border-box; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(0,0,0,0.4); }
+.status-btn:active { transform: scale(0.96); background: rgba(30, 41, 59, 0.7); border-color: #0ea5e9; }
+.btn-text { text-align: left; flex-grow: 1; margin-left: 18px; }
+.btn-text strong { display: block; font-size: 1.1rem; margin-bottom: 4px; color: #f8fafc; font-weight: 500; }
+.btn-text small { color: #475569; font-size: 0.85rem; }
+.emoji { font-size: 2rem; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 18px; width: 46px; height: 46px; display: flex; align-items: center; justify-content: center; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.03); }
+.overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(7, 10, 19, 0.96); justify-content: center; align-items: center; z-index: 10; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); animation: fadeIn 0.25s ease; }
+.modal { background: #0f172a; border: 1px solid rgba(255,255,255,0.08); padding: 32px 24px; border-radius: 28px; max-width: 320px; width: 85%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.modal h2 { color: #f8fafc; font-size: 1.35rem; margin-top: 0; font-weight: 600; }
+.food-recommend { background: linear-gradient(135deg, rgba(14,165,233,0.15) 0%, rgba(14,165,233,0.02) 100%); padding: 14px; border-radius: 16px; margin: 20px 0; font-weight: 600; color: #38bdf8; font-size: 1rem; border: 1px solid rgba(14,165,233,0.2); }
+.quote { font-size: 0.95rem; color: #94a3b8; line-height: 1.7; margin-bottom: 28px; text-align: justify; min-height: 90px; display: flex; align-items: center; }
+.close-btn { background: #f8fafc; color: #0f172a; border: none; padding: 16px 25px; border-radius: 18px; cursor: pointer; font-weight: 600; width: 100%; font-size: 1rem; transition: all 0.2s; }
+.close-btn:active { transform: scale(0.97); background: #cbd5e1; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+</style>
+
+<script>
+const db = {
+    milk: {
+        food: "超商熱燕麥奶 / 附近星巴克熱拿鐵",
+        quotes: [
+            "對齊了一整天的 Level 1 報價與衍生性商品，辛苦你的眼睛和大腦了。走出商辦大樓，信義區的霓虹燈此時此刻都與你無關。聽話，進超商買杯溫熱的燕麥奶，今晚不尋求完美，只尋求內心的平衡。",
+            "民生東路三段的夜風有點涼了。思緒還停留在今天的試算表和財報數字裡嗎？這是正常的。深呼吸，喝口熱奶，讓溫暖把大腦裡跳動的數字重影慢慢融化。今晚的你，已經做得很好了。",
+            "大腦過載的時候，最不需要的就是理智。把緊繃的神經交給熱流吧。不管你在信義區還是民生東路，台北的市場今晚已經睡了，現在是屬於你的負載平衡時間。"
+        ]
+    },
+    chocolate: {
+        food: "微甜黑巧克力 2 片 + 溫水",
+        quotes: [
+            "ECL 減損的模型和客戶的無解爭執，消耗了你太多心力。你不需要背負所有人的情緒，客戶的抗拒不是你的錯。吃片巧克力，看看車流，這不是逃避，這是你應得的深夜溫柔。",
+            "今天辛苦了，被洗臉不是因為你不夠好，只是每個人都在打自己的仗。民生東路上的路燈很安靜，讓微苦帶甜的巧克力在舌尖化開，把委屈吞下去，轉化成防禦心靈的護盾。",
+            "那些反覆修改的底稿報告、無理的要求，到此為止了。閉上眼感受巧克力的甜味。台北這座城市很擠，但現在這個角落只屬於你。你受委屈了，休息吧。"
+        ]
+    },
+    soup: {
+        food: "超商熱關東煮大根、熱湯 / 24H一蘭拉麵或牛肉麵",
+        quotes: [
+            "面對突襲函查或深夜的底稿修正，你就像個用盡燃料的機器。聽話，這時別吃油膩的宵夜傷害身體。進超商買個熱熱的大根，喝兩口熱湯，把積了一整天的疲憊狠狠吐出來。",
+            "從信義區商辦大樓走出來，靈魂是不是有點飄在外面了？如果是，聽話，去威秀附近或開車找碗熱湯。你是一個人撐過這兵荒馬亂的一天的，你真的很了不起。",
+            "底稿、審計、追蹤、趕工...今晚的兵荒馬亂終於結束了。在民生東路三段的深夜裡，去超商盛一碗熱呼呼的關東煮湯，把胃填暖。把工作留在辦公室，今晚你只屬於你自己。"
+        ]
+    }
+};
+
+let lastIndexes = { milk: -1, chocolate: -1, soup: -1 };
+
+function showCoolDown(title, category) {
+    const asset = db[category];
+    const totalQuotes = asset.quotes.length;
+    let randomIndex = Math.floor(Math.random() * totalQuotes);
+    
+    if (randomIndex === lastIndexes[category]) {
+        randomIndex = (randomIndex + 1) % totalQuotes;
+    }
+    lastIndexes[category] = randomIndex;
+    
+    document.getElementById("modal-title").innerText = title;
+    document.getElementById("modal-food").innerText = "☕️ 深夜補給資產：" + asset.food;
+    document.getElementById("modal-quote").innerText = asset.quotes[randomIndex];
+    document.getElementById("overlay").style.display = "flex";
+}
+
+function border() {} 
+function closeCoolDown() {
+    document.getElementById("overlay").style.display = "none";
+}
+</script>
