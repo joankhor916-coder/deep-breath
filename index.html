@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>💚 E.SUN Workspace</title>
+    <title>⚡ E.SUN x Chiikawa 特工部隊戰術控制台</title>
     <style>
         :root {
-            --bg-color: #060a12;
-            --card-bg: rgba(15, 23, 42, 0.65);
-            --border-color: rgba(255, 255, 255, 0.08);
+            --bg-color: #020617;
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --border-color: rgba(16, 185, 129, 0.2);
             --text-main: #f8fafc;
-            --text-sub: #94a3b8;
+            --text-sub: #64748b;
             --esun-green: #10b981;
-            --esun-glow: rgba(16, 185, 129, 0.25);
+            --esun-glow: rgba(16, 185, 129, 0.4);
+            --terminal-red: #ef4444;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+            font-family: 'Courier New', Courier, monospace, -apple-system, sans-serif;
             margin: 0;
             padding: 24px 16px;
             min-height: 100vh;
@@ -29,7 +30,6 @@
             overflow-x: hidden;
         }
 
-        /* 翡翠極光背景 */
         .aurora-bg {
             position: fixed;
             top: 0;
@@ -37,8 +37,8 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.12) 0%, transparent 50%),
-                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.06) 0%, transparent 50%);
+                radial-gradient(circle at 50% 10%, rgba(16, 185, 129, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 10% 90%, rgba(239, 68, 68, 0.05) 0%, transparent 40%);
             pointer-events: none;
             z-index: 1;
         }
@@ -53,85 +53,170 @@
         header {
             text-align: center;
             margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 12px;
+            box-shadow: 0 0 15px var(--esun-glow);
         }
 
         h1 {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             margin: 0 0 6px 0;
             font-weight: 700;
-            letter-spacing: -0.5px;
+            color: var(--esun-green);
+            text-shadow: 0 0 8px var(--esun-glow);
         }
 
         .subtitle {
-            font-size: 1.05rem;
-            color: var(--esun-green);
+            font-size: 0.9rem;
+            color: #cbd5e1;
             font-weight: 600;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             margin-bottom: 12px;
         }
 
-        /* 倒數計時器樣式 */
         .countdown-box {
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 8px 16px;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            color: #34d399;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #fca5a5;
             font-weight: 700;
             display: inline-block;
-            margin-top: 4px;
-            letter-spacing: 0.5px;
         }
 
-        /* 職位切換橫條（加入會計師） */
-        .role-selector {
+        /* 職級大分類切換 */
+        .level-selector {
             display: flex;
-            background: rgba(15, 23, 42, 0.8);
+            background: #0f172a;
             border: 1px solid var(--border-color);
             padding: 4px;
-            border-radius: 16px;
-            margin-bottom: 20px;
+            border-radius: 12px;
+            margin-bottom: 12px;
             gap: 4px;
         }
 
-        .role-btn {
+        .level-btn {
             flex: 1;
             background: transparent;
             border: none;
             color: var(--text-sub);
-            padding: 12px 2px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 600;
+            padding: 10px 0;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
-            text-align: center;
         }
 
-        .role-btn.active {
-            background: var(--esun-green);
-            color: #042f1a;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        .level-btn.active {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--esun-green);
+            border: 1px solid var(--esun-green);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
         }
 
-        /* 進度條外殼 */
-        .progress-container {
+        /* Staff 子角色切換 */
+        .staff-sub-selector {
+            display: flex;
             background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            gap: 4px;
+        }
+
+        .staff-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            padding: 8px 0;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .staff-btn.active {
+            background: var(--esun-green);
+            color: #020617;
+            font-weight: 700;
+        }
+
+        /* 物資補給專區 */
+        .food-helper-box {
+            background: rgba(15, 23, 42, 0.9);
             border: 1px solid var(--border-color);
-            padding: 16px;
-            border-radius: 20px;
-            margin-bottom: 24px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 20px;
+        }
+
+        .food-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--esun-green);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .food-btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .food-action-btn {
+            flex: 1;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #e2e8f0;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .food-action-btn:hover {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--esun-green);
+        }
+
+        .food-result-display {
+            margin-top: 10px;
+            padding: 10px;
+            background: #020617;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            display: none;
+            border-left: 3px solid var(--esun-green);
+            line-height: 1.4;
+        }
+
+        /* 進度條 */
+        .progress-container {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            border-radius: 14px;
+            margin-bottom: 20px;
         }
 
         .progress-text-row {
             display: flex;
             justify-content: space-between;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            color: var(--text-sub);
+            color: #cbd5e1;
             margin-bottom: 8px;
         }
 
@@ -141,34 +226,31 @@
         }
 
         .progress-bar-bg {
-            background: #1e293b;
-            height: 10px;
+            background: #020617;
+            height: 8px;
             width: 100%;
-            border-radius: 999px;
+            border-radius: 4px;
             overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .progress-bar-fill {
             background: var(--esun-green);
             height: 100%;
             width: 0%;
-            border-radius: 999px;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 12px var(--esun-glow);
+            transition: width 0.4s ease;
+            box-shadow: 0 0 8px var(--esun-glow);
         }
 
-        /* 輸入框區塊 */
+        /* 任務頒布區 */
         .input-section {
-            background: var(--card-bg);
+            background: rgba(15, 23, 42, 0.9);
             border: 1px solid var(--border-color);
-            padding: 14px;
-            border-radius: 20px;
+            padding: 10px;
+            border-radius: 12px;
             display: flex;
             gap: 10px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .input-section input {
@@ -176,9 +258,10 @@
             background: transparent;
             border: none;
             color: var(--text-main);
-            font-size: 1.15rem;
-            padding: 8px 12px;
+            font-size: 0.95rem;
+            padding: 6px;
             outline: none;
+            font-family: inherit;
         }
 
         .input-section input::placeholder {
@@ -187,67 +270,61 @@
 
         .add-btn {
             background: var(--esun-green);
-            color: #042f1a;
+            color: #020617;
             border: none;
-            border-radius: 14px;
-            padding: 0 20px;
-            font-size: 1.1rem;
+            border-radius: 8px;
+            padding: 0 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 0.85rem;
         }
 
-        /* 列表區塊 */
+        /* 待辦項目 */
         .todo-list {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 10px;
             margin-bottom: 30px;
         }
 
         .todo-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 20px 18px;
-            border-radius: 22px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 14px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
 
         .todo-left {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             flex: 1;
         }
 
         .checkbox {
-            width: 26px;
-            height: 26px;
+            width: 18px;
+            height: 18px;
             border: 2px solid #475569;
-            border-radius: 8px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            flex-shrink: 0;
         }
 
         .todo-text {
-            font-size: 1.25rem;
-            font-weight: 500;
-            color: var(--text-main);
+            font-size: 0.95rem;
             line-height: 1.4;
+            color: #e2e8f0;
         }
 
         .todo-item.completed {
-            border-color: rgba(16, 185, 129, 0.15);
-            background: rgba(15, 23, 42, 0.35);
-            opacity: 0.5;
+            border-color: rgba(16, 185, 129, 0.1);
+            background: rgba(15, 23, 42, 0.3);
         }
 
         .todo-item.completed .checkbox {
@@ -257,43 +334,47 @@
 
         .todo-item.completed .checkbox::after {
             content: "✓";
-            color: #042f1a;
-            font-size: 1.1rem;
+            color: #020617;
+            font-size: 0.85rem;
             font-weight: 900;
         }
 
         .todo-item.completed .todo-text {
             text-decoration: line-through;
-            color: var(--text-sub);
+            color: #475569;
         }
 
         .delete-btn {
             background: transparent;
             border: none;
-            color: #ef4444;
-            font-size: 1.25rem;
+            color: var(--terminal-red);
             cursor: pointer;
-            padding: 8px;
-            opacity: 0.4;
+            opacity: 0.5;
+            padding: 4px 8px;
+            font-family: inherit;
         }
 
-        .logout-section {
-            text-align: center;
-            margin-top: 40px;
-        }
-
+        /* 強制解鎖關機 */
         .logout-btn {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.25);
-            color: #fca5a5;
-            padding: 18px 32px;
-            border-radius: 22px;
-            font-size: 1.2rem;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: #475569;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 0.95rem;
             font-weight: 700;
-            cursor: pointer;
+            cursor: not-allowed;
             width: 100%;
-            box-sizing: border-box;
-            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15);
+            font-family: inherit;
+            letter-spacing: 1px;
+        }
+
+        .logout-btn.ready {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--terminal-red);
+            color: #fca5a5;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
         }
 
         /* 彈出視窗 */
@@ -304,68 +385,52 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(7, 10, 19, 0.97);
+            background: rgba(2, 6, 23, 0.98);
             justify-content: center;
             align-items: center;
             z-index: 10;
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            animation: fadeIn 0.25s ease;
         }
 
         .modal {
             background: #0f172a;
-            border: 1px solid rgba(255,255,255,0.12);
-            padding: 36px 28px;
-            border-radius: 32px;
-            max-width: 360px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 16px;
+            max-width: 340px;
             width: 88%;
             text-align: center;
-            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
-            animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .modal h2 {
-            color: #fca5a5;
-            font-size: 1.5rem;
-            margin-top: 0;
-            font-weight: 700;
+            box-shadow: 0 0 30px var(--esun-glow);
         }
 
         .food-recommend {
-            background: linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(16,185,129,0.03) 100%);
-            padding: 18px;
-            border-radius: 18px;
-            margin: 24px 0;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 16px 0;
             font-weight: 700;
-            color: #34d399;
-            font-size: 1.25rem;
-            border: 1px solid rgba(16,185,129,0.25);
-            line-height: 1.4;
+            color: var(--esun-green);
+            border: 1px solid var(--border-color);
         }
 
         .quote {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             color: #cbd5e1;
-            line-height: 1.8;
-            margin-bottom: 32px;
+            line-height: 1.6;
+            margin-bottom: 20px;
             text-align: justify;
         }
 
         .close-btn {
-            background: #f8fafc;
-            color: #0f172a;
+            background: var(--esun-green);
+            color: #020617;
             border: none;
-            padding: 18px 25px;
-            border-radius: 20px;
-            cursor: pointer;
+            padding: 12px;
+            border-radius: 8px;
             font-weight: 700;
             width: 100%;
-            font-size: 1.1rem;
+            font-family: inherit;
+            cursor: pointer;
         }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -374,24 +439,41 @@
 
     <div class="container">
         <header>
-            <h1>💚 E.SUN Workspace</h1>
-            <div class="subtitle">玉山集團 115Q2 · 深夜戰術檯</div>
-            <!-- 倒數計時區 -->
-            <div class="countdown-box" id="countdown-display">⏳ 距離 8/14 報告日：計算中...</div>
+            <h1>⚡ OPERATION E.SUN Q2</h1>
+            <div class="subtitle">玉山營業部 · 特工部隊行動控制台</div>
+            <div class="countdown-box" id="countdown-display">⏳ 距離 8/14 死線突擊：計算中...</div>
         </header>
 
-        <!-- 職位一鍵切換列（加入會計師） -->
-        <div class="role-selector">
-            <button class="role-btn active" data-role="ic" onclick="switchRole('ic')">IC</button>
-            <button class="role-btn" data-role="staff" onclick="switchRole('staff')">Staff</button>
-            <button class="role-btn" data-role="manager" onclick="switchRole('manager')">經理</button>
-            <button class="role-btn" data-role="partner" onclick="switchRole('partner')">會計師</button>
+        <!-- 第一層：部隊編制切換 -->
+        <div class="level-selector">
+            <button class="level-btn active" id="lvl-ic" onclick="switchLevel('ic')">指揮官 吉伊 🐹</button>
+            <button class="level-btn" id="lvl-staff" onclick="switchLevel('staff')">突擊前線 (Staff)</button>
+            <button class="level-btn" id="lvl-manager" onclick="switchLevel('manager')">戰術參謀 🐰</button>
+            <button class="level-btn" id="lvl-partner" onclick="switchLevel('partner')">統帥 栗子 🌰</button>
         </div>
 
-        <!-- 實時任務進度條 -->
+        <!-- 第二層：突擊前線部隊代號 -->
+        <div class="staff-sub-selector" id="staff-sub-box" style="display: none;">
+            <button class="staff-btn active" data-staff="usagi" onclick="switchStaff('usagi')"><span>🐰</span><span>兔兔隊員</span></button>
+            <button class="staff-btn" data-staff="hachiware" onclick="switchStaff('hachiware')"><span>🐱</span><span>小八隊員</span></button>
+            <button class="staff-btn" data-staff="mome" onclick="switchStaff('mome')"><span>🐿️</span><span>小桃隊員</span></button>
+            <button class="staff-btn" data-staff="kuhon" onclick="switchStaff('kuhon')"><span>🐷</span><span>古本屋隊員</span></button>
+        </div>
+
+        <!-- 特工補給專區 -->
+        <div class="food-helper-box">
+            <div class="food-title">📡 SECURE SUPPLY // 民生東路三段物資補給</div>
+            <div class="food-btn-group">
+                <button class="food-action-btn" onclick="getRandomFood('lunch')">🏃‍♂️ 戰地極速外帶 (中午)</button>
+                <button class="food-action-btn" onclick="getRandomFood('drink')">📱 空投續命手搖 (下午)</button>
+            </div>
+            <div id="food-result" class="food-result-display"></div>
+        </div>
+
+        <!-- 任務解鎖進度 -->
         <div class="progress-container">
             <div class="progress-text-row">
-                <span>當前職級任務完成度</span>
+                <span id="progress-role-label">載入代號中...</span>
                 <span id="progress-percent">0%</span>
             </div>
             <div class="progress-bar-bg">
@@ -399,184 +481,207 @@
             </div>
         </div>
 
+        <!-- 指揮官任務頒布區 -->
         <div class="input-section">
-            <input type="text" id="todo-input" placeholder="新增今晚必做查核項目..." onkeypress="handleKeyPress(event)">
-            <button class="add-btn" onclick="addTodo()">新增</button>
+            <input type="text" id="todo-input" placeholder="[指揮官權限] 頒布今晚特工行動..." onkeypress="handleKeyPress(event)">
+            <button class="add-btn" onclick="addTodo()">頒布</button>
         </div>
 
+        <!-- 行動任務清單 -->
         <div class="todo-list" id="todo-list"></div>
 
+        <!-- 強制撤離登出 -->
         <div class="logout-section">
-            <button class="logout-btn" onclick="triggerShutdown()">⚠️ 大腦強制關機登出</button>
+            <button class="logout-btn" id="shutdown-btn" onclick="triggerShutdown()">🔒 解鎖安全關機撤離 (0%)</button>
         </div>
     </div>
 
+    <!-- 行動回報彈出視窗 -->
     <div id="overlay" class="overlay">
         <div class="modal">
-            <h2>大腦關機 · 系統登出成功</h2>
-            <div id="modal-food" class="food-recommend">推薦補給品載入中...</div>
-            <p id="modal-quote" class="quote">碎碎念載入中...</p>
-            <button class="close-btn" onclick="closeModal()">收到底稿，現在關機睡覺</button>
+            <h2 style="color: var(--esun-green); margin-top:0;">💥 TACTICAL CLEAR // 討伐成功</h2>
+            <div id="modal-title" class="food-recommend"></div>
+            <p id="modal-quote" class="quote"></p>
+            <button class="close-btn" onclick="closeModal()">⚡「哇…（安全撤離，強制斷電！）」</button>
         </div>
     </div>
 
     <script>
-        // 包含會計師的預設核心清單
-        const roleTasks = {
-            ic: [
-                "所得稅：核對 DTA/DTL 計算底稿與稅率調整差異",
-                "貼現及放款：複核 ECL 減損計提與大額曝險分類",
-                "現金流量表：勾稽直接法與間接法落差數字",
-                "IC 職責：確認 Staff 底稿 review 進度與經理 mail 彙整"
+        // 特工行動原始設定集
+        const defaultTasks = {
+            "ic": ["[⚔️核心突擊] 攻克大魔王所得稅模組，核對 DTA/DTL 調整差異", "[⚔️關鍵防線] 編製現金流量表，絕對勾稽平齊直接法與間接法落差", "[📡戰術指揮] 監控前線 Staff 特工部隊的底稿查核進度"],
+            "staff_usagi": ["[🏃‍♂️極速抽樣] 配合火網掩護，以烏拉的速度將全部放款傳票抽調完畢", "[🏃‍♂️金流攻佔] 點收期末對帳單，核對完畢發出「呀哈！」的勝利咆哮"],
+            "staff_hachiware": ["[🐱戰地救援] 溫柔跟催詢證函回函進度，並將敵情完整掃描建檔", "[🐱後勤支援] 安撫與掩護旁邊因為數字對不起來在流淚的同袍"],
+            "staff_mome": ["[🐿️情報美化] 執行底稿視覺偽裝，將排版調整至最完美、最可愛程度", "[🐿️心理防禦] 吃掉敵方零食，用可愛的微笑化解長官查堂的加班氣壓"],
+            "staff_kuhon": ["[🐷戰術整理] 默默將後方雜亂的傳票分門別類，排成整齊的防衛陣形", "[🐷物資跟進] 監控並準備好下午茶的空投 UberEats 訂單清單"],
+            "manager": ["[👔戰術覆核] 審查由指揮官吉伊卡哇提交的重大調整科目底稿", "[👔外交斡旋] 親自與玉山高層窗口通話，強攻突擊尚未收回的大額詢證函"],
+            "partner": ["🌰 [最終簽核] 於 115Q2 玉山財報核閱報告上簽署最高統帥印鑑", "🌰 [風險裁決] 針對大額貼現與放款之 ECL 呆帳提列發動最終核准指令"]
+        };
+
+        const roleMeta = {
+            "ic": { name: "指揮官 吉伊卡哇 🐹", done: "哇…（流淚）！所得稅與現金流量表全數平齊！指揮官吉伊卡哇今晚頂住死線壓力，討伐大成功！全體安全撤離，立刻躲進被窩強制斷電！" },
+            "staff_usagi": { name: "突擊特工 兔兔 🐰", done: "烏拉！！！呀哈！！！兔兔特工以風捲殘雲之勢解決了所有傳票抽樣！現在立刻拋下武器，全速奔跑回家強制關機！" },
+            "staff_hachiware": { name: "醫護特工 小八貓 🐱", done: "「總會有辦法的！」小八隊員完美守住後勤！底稿全數歸零，快放下滑鼠，喝碗熱湯好好睡一覺吧！" },
+            "staff_mome": { name: "偽裝特工 小桃鼠 🐿️", done: "哼哼～小桃特工出馬，沒有搞不定的底稿！本公主現在下達最高指令：立刻撤離下班，強制關機！" },
+            "staff_kuhon": { name: "後勤特工 古本屋 🐷", done: "防線整理完畢！古本屋隊員默默把所有繁雜傳票歸檔得完美無瑕！辛苦了，快強制斷電休息去！" },
+            "manager": { name: "戰術參謀 經理 🐰", done: "經理參謀辛苦了！防線防守成功，Q2 風暴順利解除，現在馬上跟著兔兔隊員一起快樂斷電下班！" },
+            "partner": { name: "最高統帥 栗子饅頭 🌰", done: "哈啊——！（吐氣）報告簽核完畢！今晚最完美的特工配置就是立刻撤離，回去享受大叔般的深夜安穩睡眠！" }
+        };
+
+        const foodDatabase = {
+            lunch: [
+                "🍱 慶城海南雞飯（1號餐极速外帶，回基地快速補給）",
+                "🍛 興安街 家鄉四川抄手麵（辣度全開，強力抗壓）",
+                "🍜 興安街 3元6青蛙湯/虱目魚粥（深夜突擊的熱湯防禦）",
+                "🍲 包記饅頭 或 附近的排骨便當（厚實高熱量，迎戰高強度查核）"
             ],
-            staff: [
-                "現金及約當現金：核對玉山銀行期末存款詢證函與對帳單",
-                "貼現及放款：拉取傳票進行抽樣，確認利息收入與授信借款合約",
-                "基本查核：完成放款大戶基本資料、營業活動資產負債變動明細"
-            ],
-            manager: [
-                "進度督導：審查 IC 送出之 115Q2 核心科目重大調整",
-                "客戶溝通：與玉山窗口協調未送達之詢證函與財報揭露細項",
-                "風險控制：全面評估本季貼現放款之備抵呆帳提列合理性"
-            ],
-            partner: [
-                "最終簽核：覆核經理與 IC 提報之 115Q2 玉山財報與重要揭露",
-                "策略複核：針對重大放款 ECL 減損提列與所得稅差異進行最後指導",
-                "客戶溝通：與玉山高層、審計委員會進行審計結果關鍵溝通"
+            drink: [
+                "🥤 得正 Oolong Tea（空投焙烏龍加茶凍，續命神物）",
+                "🧋 約翰紅茶公司（點煮濃那鐵，用濃郁乳香麻痺數字痛苦）",
+                "🍵 烏弄 UNOCHA（金萱冬片無糖，保持神經高度清醒）",
+                "🍋 麻古茶坊（芝芝系列，快樂多酚大暴走）"
             ]
         };
 
-        const shutdownSupplies = [
-            { food: "🍢 超商關東煮：熱湯 + 溫熱大根", quote: "115Q2 的玉山案件帳很大、很雜，但今晚你的進度已經做得很棒了。不管是調不平的現金流量表、還是對不完的放款，現在全部留在辦公室。去超商盛碗熱湯，暖暖胃，這才是今晚最迫切的資產配置。" },
-            { food: "🥛 溫熱燕麥奶 或 低咖啡因熱拿鐵", quote: "大魔王所得稅的遞延資產負債公式、還有複雜的詢證函是不是在腦袋裡打轉？身為玉山案件的一員，你頂著高壓運轉一整天，大腦該進行負載平衡了。喝杯熱奶，把數字開關切斷，好好睡一覺。" },
-            { food: "🍫 2片微甜黑巧克力 + 溫開水", quote: "下班從信義區或民生東路走出來，台北深夜的夜風特別冷清。每個人都盯著進度，但只有此時舌尖融化的黑巧克力懂你的辛苦。別想財報永久性差異或底稿了，吞下這口甜，今天你已經對得起所有人了。" },
-            { food: "🥣 鮮美溫熱的清鯛魚湯 或 蛤蜊湯", quote: "撐過了高強度的查核大戰，胃需要溫柔的修復。不要吃油膩宵夜，來碗清鮮熱湯。115Q2 的死線明天再說，今晚你的靈魂要點擊登出，好好睡一覺，辛苦了！" }
-        ];
+        let currentLevel = localStorage.getItem("tg_lvl") || "ic"; 
+        let currentStaff = localStorage.getItem("tg_stf") || "usagi"; 
+        let allTodos = JSON.parse(localStorage.getItem("tg_todos_v5")) || {};
 
-        let currentRole = localStorage.getItem("esun_current_role") || "ic";
-        let allRoleTodos = JSON.parse(localStorage.getItem("esun_all_todos")) || {};
-
-        // 如果快取中沒有 partner，或者結構需要更新，重新初始化
-        if (!allRoleTodos.partner) {
-            allRoleTodos = {};
+        function getActiveKey() {
+            return currentLevel === "staff" ? `staff_${currentStaff}` : currentLevel;
         }
 
-        if (Object.keys(allRoleTodos).length === 0) {
-            Object.keys(roleTasks).forEach(role => {
-                allRoleTodos[role] = roleTasks[role].map(task => ({ text: task, completed: false }));
+        if (Object.keys(allTodos).length === 0) {
+            Object.keys(defaultTasks).forEach(k => {
+                allTodos[k] = defaultTasks[k].map(t => ({ text: t, completed: false }));
             });
         }
 
-        // 計算並更新進度條
-        function updateProgressBar() {
-            const todos = allRoleTodos[currentRole] || [];
-            const total = todos.length;
-            const completed = todos.filter(t => t.completed).length;
+        function switchLevel(lvl) {
+            currentLevel = lvl;
+            localStorage.setItem("tg_lvl", lvl);
             
-            let percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+            document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
+            document.getElementById(`lvl-${lvl}`).classList.add("active");
+
+            const staffBox = document.getElementById("staff-sub-box");
+            if (lvl === "staff") {
+                staffBox.style.display = "flex";
+            } else {
+                staffBox.style.display = "none";
+            }
             
-            document.getElementById("progress-percent").innerText = `${percent}%`;
-            document.getElementById("progress-fill").style.width = `${percent}%`;
+            document.getElementById("food-result").style.display = "none";
+            render();
         }
 
-        function renderTodos() {
+        function switchStaff(stf) {
+            currentStaff = stf;
+            localStorage.setItem("tg_stf", stf);
+            
+            document.querySelectorAll(".staff-btn").forEach(b => b.classList.remove("active"));
+            const btn = document.querySelector(`.staff-btn[data-staff="${stf}"]`);
+            if (btn) btn.classList.add("active");
+            
+            document.getElementById("food-result").style.display = "none";
+            render();
+        }
+
+        function updateProgress() {
+            const key = getActiveKey();
+            const list = allTodos[key] || [];
+            const total = list.length;
+            const done = list.filter(t => t.completed).length;
+            const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+
+            document.getElementById("progress-role-label").innerText = `⚡ ${roleMeta[key].name} // 行動達成度`;
+            document.getElementById("progress-percent").innerText = `${pct}%`;
+            document.getElementById("progress-fill").style.width = `${pct}%`;
+
+            const btn = document.getElementById("shutdown-btn");
+            if (pct === 100 && total > 0) {
+                btn.classList.add("ready");
+                btn.innerText = "⚠️ TACTICAL CLEAR // 解鎖大腦強制關機撤離";
+                btn.disabled = false;
+            } else {
+                btn.classList.remove("ready");
+                btn.innerText = `🔒 請先解除所有威脅項目以解鎖撤離 (${done}/${total})`;
+                btn.disabled = true;
+            }
+        }
+
+        function render() {
+            const key = getActiveKey();
             const listEl = document.getElementById("todo-list");
             listEl.innerHTML = "";
-            const todos = allRoleTodos[currentRole] || [];
+            const list = allTodos[key] || [];
 
-            todos.forEach((todo, index) => {
+            list.forEach((todo, idx) => {
                 const item = document.createElement("div");
                 item.className = `todo-item ${todo.completed ? 'completed' : ''}`;
                 item.innerHTML = `
-                    <div class="todo-left" onclick="toggleTodo(${index})">
+                    <div class="todo-left" onclick="toggleTodo(${idx})">
                         <div class="checkbox"></div>
                         <div class="todo-text">${todo.text}</div>
                     </div>
-                    <button class="delete-btn" onclick="deleteTodo(${index})">✕</button>
+                    <button class="delete-btn" onclick="deleteTodo(${idx})">✕</button>
                 `;
                 listEl.appendChild(item);
             });
-            localStorage.setItem("esun_all_todos", JSON.stringify(allRoleTodos));
-            updateProgressBar();
-        }
 
-        function switchRole(role) {
-            currentRole = role;
-            localStorage.setItem("esun_current_role", role);
-            
-            document.querySelectorAll(".role-btn").forEach(btn => btn.classList.remove("active"));
-            
-            if (window.event && window.event.target && window.event.target.classList.contains("role-btn")) {
-                window.event.target.classList.add("active");
-            } else {
-                const activeBtn = document.querySelector(`.role-btn[data-role="${role}"]`);
-                if (activeBtn) activeBtn.classList.add("active");
-            }
-            renderTodos();
+            localStorage.setItem("tg_todos_v5", JSON.stringify(allTodos));
+            updateProgress();
         }
 
         function addTodo() {
             const input = document.getElementById("todo-input");
             const text = input.value.trim();
             if (text) {
-                allRoleTodos[currentRole].unshift({ text: text, completed: false });
+                const key = getActiveKey();
+                allTodos[key].unshift({ text: `[${roleMeta[key].name.split(' ')[1]}任務] ${text}`, completed: false });
                 input.value = "";
-                renderTodos();
+                render();
             }
         }
 
         function handleKeyPress(e) { if (e.key === "Enter") addTodo(); }
-        
-        function toggleTodo(index) { 
-            allRoleTodos[currentRole][index].completed = !allRoleTodos[currentRole][index].completed; 
-            renderTodos(); 
-        }
-        
-        function deleteTodo(index) { 
-            allRoleTodos[currentRole].splice(index, 1); 
-            renderTodos(); 
+        function toggleTodo(idx) { const key = getActiveKey(); allTodos[key][idx].completed = !allTodos[key][idx].completed; render(); }
+        function deleteTodo(idx) { const key = getActiveKey(); allTodos[key].splice(idx, 1); render(); }
+
+        function getRandomFood(type) {
+            const list = foodDatabase[type];
+            const res = list[Math.floor(Math.random() * list.length)];
+            const el = document.getElementById("food-result");
+            el.style.display = "block";
+            el.innerHTML = type === 'lunch' ? `📡 <b>戰地物資報告：</b><br>${res}` : `📡 <b>空投能量補給：</b><br>${res}`;
         }
 
-        // 8/14 報告日倒數功能
         function updateCountdown() {
-            const targetDate = new Date("2026-08-14T00:00:00+08:00");
-            const now = new Date();
-            const timeDiff = targetDate - now;
-
-            if (timeDiff <= 0) {
-                document.getElementById("countdown-display").innerText = "🎉 8/14 報告日已到！大功告成！";
+            const target = new Date("2026-08-14T00:00:00+08:00");
+            const diff = target - new Date();
+            if (diff <= 0) {
+                document.getElementById("countdown-display").innerText = "💥 ACTION COMPLETE // 突擊日已到，全員撤離！";
                 return;
             }
-
-            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const mins = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-
-            document.getElementById("countdown-display").innerText = `⏳ 距離 8/14 報告日：${days} 天 ${hours} 小時 ${mins} 分`;
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            document.getElementById("countdown-display").innerText = `⏳ 距離 8/14 死線決戰：${d} 天 ${h} 小時 ${m} 分`;
         }
 
         function triggerShutdown() {
-            const randomIndex = Math.floor(Math.random() * shutdownSupplies.length);
-            const supply = shutdownSupplies[randomIndex];
-            document.getElementById("modal-food").innerText = "☕️ 深夜推薦資產：\n" + supply.food;
-            document.getElementById("modal-quote").innerText = supply.quote;
+            const key = getActiveKey();
+            document.getElementById("modal-title").innerText = `💥 代號 [${roleMeta[key].name}] 任務全清空！`;
+            document.getElementById("modal-quote").innerText = roleMeta[key].done;
             document.getElementById("overlay").style.display = "flex";
         }
-
         function closeModal() { document.getElementById("overlay").style.display = "none"; }
 
         document.addEventListener("DOMContentLoaded", () => {
-            document.querySelectorAll(".role-btn").forEach(btn => {
-                if (btn.getAttribute("data-role") === currentRole) {
-                    btn.classList.add("active");
-                } else {
-                    btn.classList.remove("active");
-                }
-            });
-            renderTodos();
-            updateCountdown();
-            // 每分鐘更新一次倒數計時
+            switchLevel(currentLevel);
+            if (currentLevel === "staff") switchStaff(currentStaff);
             setInterval(updateCountdown, 60000);
+            updateCountdown();
         });
     </script>
 </body>
