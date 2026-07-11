@@ -482,7 +482,6 @@
             <div class="countdown-box" id="countdown-display">⏳ 距離 死線決戰：計算中...</div>
         </header>
 
-        <!-- 第一層：部隊編制切換 -->
         <div class="level-selector">
             <button class="level-btn active" id="lvl-ic" onclick="switchLevel('ic')">指揮官 吉伊 🐹</button>
             <button class="level-btn" id="lvl-staff" onclick="switchLevel('staff')">突擊前線 (Staff)</button>
@@ -490,7 +489,6 @@
             <button class="level-btn" id="lvl-partner" onclick="switchLevel('partner')">最高統帥 🌰</button>
         </div>
 
-        <!-- 第二層：突擊前線部隊代號 -->
         <div class="staff-sub-selector" id="staff-sub-box" style="display: none;">
             <button class="staff-btn active" data-staff="usagi" onclick="switchStaff('usagi')"><span>🐰</span><span>兔兔隊員</span></button>
             <button class="staff-btn" data-staff="hachiware" onclick="switchStaff('hachiware')"><span>🐱</span><span>小八隊員</span></button>
@@ -498,17 +496,15 @@
             <button class="staff-btn" data-staff="kuhon" onclick="switchStaff('kuhon')"><span>🐷</span><span>古本屋隊員</span></button>
         </div>
 
-        <!-- 特工物資補給專區 -->
         <div class="food-helper-box">
             <div class="food-title">📦 SECURE SUPPLY // 戰地物資補給庫</div>
             <div class="food-btn-group">
-                <button class="food-action-btn" onclick="getRandomFood('lunch')">🥪 中午吃啥 (食物類型)</button>
-                <button class="food-action-btn" onclick="getRandomFood('drink')">🥤 下午茶 (台灣手搖天團)</button>
+                <button class="food-action-btn" onclick="getRandomFood('lunch')">🥪 中午吃啥 (20款食物大庫)</button>
+                <button class="food-action-btn" onclick="getRandomFood('drink')">🥤 下午茶 (20家手搖天團)</button>
             </div>
             <div id="food-result" class="food-result-display"></div>
         </div>
 
-        <!-- 任務解鎖進度 -->
         <div class="progress-container">
             <div class="progress-text-row">
                 <span id="progress-role-label">載入代號中...</span>
@@ -519,22 +515,18 @@
             </div>
         </div>
 
-        <!-- 指揮官任務頒布區 -->
         <div class="input-section">
             <input type="text" id="todo-input" placeholder="[指揮官權限] 頒布今晚特工行動..." onkeypress="handleKeyPress(event)">
             <button class="add-btn" onclick="addTodo()">頒布</button>
         </div>
 
-        <!-- 行動任務清單 -->
         <div class="todo-list" id="todo-list"></div>
 
-        <!-- 強制撤離登出 -->
         <div class="logout-section">
             <button class="logout-btn" id="shutdown-btn" onclick="triggerShutdown()">🔒 解鎖安全關機撤離 (0%)</button>
         </div>
     </div>
 
-    <!-- 行動回報彈出視窗 -->
     <div id="overlay" class="overlay">
         <div class="modal">
             <h2 style="color: #34d399; margin-top:0; font-weight: 800;">💥 TACTICAL CLEAR</h2>
@@ -566,25 +558,51 @@
             "partner": { name: "最高統帥 栗子饅頭 🌰", done: "哈啊——！（吐氣）報告簽核完畢！今晚最完美的特工配置就是立刻撤離，回去享受大叔般的深夜安穩睡眠！" }
         };
 
-        // 在地化擴充物資庫
+        // 擴充戰地物資庫：各 20 個經典選擇
         const foodDatabase = {
             lunch: [
-                "🏪 7-11 極速應援（御飯糰/國民便當/關東煮，快速回基地補給）",
-                "🏪 全家 便利應援（夯番薯/微波義大利麵/健康餐盒，便利續命）",
-                "🍜 熱騰騰雞塊麵（炸雞塊配爽口湯麵，戰地奢華抗壓餐）",
-                "🍢 罪惡大滷味（自由夾取蔬菜火鍋料，百搭加辣首選）",
-                "🥗 少油少鹽健康餐盒（雞胸肉/紫米飯，維持清晰作戰大腦）",
-                "🍛 濃郁系咖哩飯（厚實醬汁，迎戰高強度查核）",
-                "🥟 爆汁鍋貼水餃（快狠準高熱量，特工最愛速食）"
+                "🏪 7-11（極速應援！國民便當/御飯糰/關東煮/微波燴飯，快速回基地補給）",
+                "🏪 全家（便利續命！夯番薯/微波義大利麵/健康美膳餐盒，省時首選）",
+                "🍜 熱騰騰雞塊麵（炸雞塊配爽口湯麵，辦公室最抗壓的邪惡組合）",
+                "🍢 罪惡大滷味（自由挑選蔬菜與各式火鍋料，強烈建議加辣破壞疲勞）",
+                "🥗 少油低卡健康餐盒（水煮雞胸肉/烤鮭魚/紫米飯，維持高強度作戰腦力）",
+                "🍛 濃郁系咖哩飯（厚實醬汁配炸豬排或唐揚雞，查核空檔的精神支柱）",
+                "🥟 爆汁鍋貼水餃（快狠準高熱量，特工最速補給方案）",
+                "🍱 經典排骨/雞腿便當（老字號配菜扎實，應付爆肝下午的熱量地基）
+                "🍔 美式漢堡炸雞套餐（香脆多汁薯條，死線前的靈魂救贖）",
+                "🍣 壽司生魚片丼飯（清爽無負擔，避免下午開會全體打瞌睡）",
+                "🍜 日式拉麵/烏龍麵（濃郁豚骨湯頭，溫暖被查核折磨的胃）",
+                "🍲 台式個人小火鍋（熱湯滾滾，深夜民生東路小確幸）",
+                "🥪 精緻總匯三司/輕食沙拉（適合需要一邊敲鍵盤、一邊單手進食的危急時刻）",
+                "🍖 韓式炸雞便當（甜辣脆皮，用重口味麻痺對不平的現金流量表）",
+                "🥣 鮮美清鯛魚湯/魚肉粥（清湯修復清香甘甜，加班熬夜的溫和防線）",
+                "🥩 鐵板現炒牛/豬肉便當（香氣四溢，用大火鑊氣燃燒作戰鬥志）",
+                "🫓 炭烤燒餅油條/胡椒餅（傳統扎實麵香，極速外帶的點心式午餐）",
+                "🍝 義式培根雙醬麵（滿滿起司與醬汁，提供碳水化合物大補給）",
+                "🍚 港式燒臘便當（三寶飯油雞脆皮燒肉，高效率的極品肉食補充）",
+                "🦐 泰式酸辣打拋豬飯（酸辣開胃，一秒擊碎昏昏欲睡的盛夏查核午後）"
             ],
             drink: [
-                "🧋 台灣經典手搖（五十嵐 / 清心福全 - 烏龍綠加珍波椰）",
-                "🥤 熟成紅茶美學（可不可熟成紅茶 - 熟成歐蕾）",
-                "🍵 純茶系天花板（烏弄 / 得正 - 焙烏龍加茶凍）",
-                "🍼 濃厚系鮮奶茶（約翰紅茶公司 / 珍煮丹 - 煮濃那鐵）",
-                "🍇 快樂多酚大暴走（麻古茶坊 / 五桐號 - 芝芝果粒系列）",
-                "🥛 嚴選文青鮮乳（迷客夏 - 珍珠鮮奶綠）",
-                "🍋 在地新鮮果茶（一芳 / 大苑子 - 翡翠檸檬）"
+                "🧋 50嵐（經典1號四季春珍波椰，大杯微糖微冰是辦公室底標產物）",
+                "🥤 得正 Oolong Tea（特工激推！烘焙烏龍茶底加嫩仙草/茶凍，續命神物）",
+                "🧋 可不可熟成紅茶（熟成歐蕾/胭脂紅茶，香氣濃郁，麻痺數字痛苦）",
+                "🍵 烏弄 UNOCHA（金萱冬片無糖加杏仁凍，清爽回甘無負擔）",
+                "🍼 約翰紅茶公司（煮濃那鐵/雨果那鐵，頂級乳香治癒高壓心靈）",
+                "🍇 麻古茶坊（高山金萱茶/楊枝甘露/芝芝果粒，快樂多酚大暴走）",
+                "🥛 迷客夏 Milksha（珍珠手炒黑糖鮮奶/大甲芋頭鮮奶，醇厚乳香）",
+                "🍼 五桐號 WooTea（五桐茶加杏仁凍/青茶凍，復古茶香超順口）
+                "🍋 大苑子（翡翠檸檬/新鮮水果茶，滿滿維他命C保持神經高度清醒）",
+                "🧋 珍煮丹（黑糖珍珠鮮奶，濃郁古法黑糖，瞬間拉滿體力值）",
+                "🥤 清心福全（優多綠茶/隱藏版版多多綠，老字號極速外送保證）",
+                "🍵 一芳水果茶（溪口甘蔗青茶/水果茶，台式傳統抗壓古早味）",
+                "🧋 八曜和茶（和風乳茶/柚香覺醒，極致穀物茶清爽不卡頭）",
+                "🥛 龜記茗品（紅柚翡翠/三韻紅萱，果茶控特工的指定空投款）",
+                "🥤 萬波島嶼紅茶（紅豆粉粿鮮奶/蘭葉那堤，滿滿嚼勁的台式點心飲）",
+                "🍵 鶴茶樓（鶴頂紅茶/思鶴熟成奶茶，耐喝不膩的特工首選）",
+                "🥤 飲弄 / 茶湯會（鐵觀音拿鐵，濃郁炭焙茶香，強效提神）",
+                "🍋 先喝道（英式水果茶/蜜桃風味茶，皇家典雅風化解緊繃氣氛）",
+                "🧋 貢茶 Gong cha（奶蓋綠茶/珍珠奶茶，國際連鎖標準化穩定品質）",
+                "🥛 叮哥茶飲（洛神花茶/紅豆奶茶，偶爾換換口味的驚喜特調補給）"
             ]
         };
 
