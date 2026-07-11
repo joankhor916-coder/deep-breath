@@ -50,7 +50,6 @@
             z-index: 2;
         }
 
-        /* 標題區塊 */
         header {
             text-align: center;
             margin-bottom: 28px;
@@ -113,7 +112,6 @@
 
         .add-btn:active {
             transform: scale(0.95);
-            opacity: 0.9;
         }
 
         /* 列表區塊 */
@@ -145,7 +143,6 @@
             flex: 1;
         }
 
-        /* 精緻打勾控制項 */
         .checkbox {
             width: 26px;
             height: 26px;
@@ -164,10 +161,8 @@
             font-weight: 500;
             color: var(--text-main);
             line-height: 1.4;
-            transition: all 0.2s;
         }
 
-        /* 完成狀態樣式 */
         .todo-item.completed {
             border-color: rgba(16, 185, 129, 0.15);
             background: rgba(15, 23, 42, 0.35);
@@ -191,7 +186,6 @@
             color: var(--text-sub);
         }
 
-        /* 刪除按鈕 */
         .delete-btn {
             background: transparent;
             border: none;
@@ -200,14 +194,8 @@
             cursor: pointer;
             padding: 8px;
             opacity: 0.4;
-            transition: opacity 0.2s;
         }
 
-        .delete-btn:active {
-            opacity: 1;
-        }
-
-        /* 深夜關機登出鍵 */
         .logout-section {
             text-align: center;
             margin-top: 40px;
@@ -215,22 +203,100 @@
 
         .logout-btn {
             background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.25);
             color: #fca5a5;
-            padding: 16px 32px;
-            border-radius: 20px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 18px 32px;
+            border-radius: 22px;
+            font-size: 1.2rem;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
             box-sizing: border-box;
             transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15);
         }
 
         .logout-btn:active {
-            background: rgba(239, 68, 68, 0.2);
-            transform: scale(0.98);
+            background: rgba(239, 68, 68, 0.25);
+            transform: scale(0.97);
         }
+
+        /* 推薦食物彈出視窗（Modal）樣式 */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 10, 19, 0.97);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            animation: fadeIn 0.25s ease;
+        }
+
+        .modal {
+            background: #0f172a;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 36px 28px;
+            border-radius: 32px;
+            max-width: 360px;
+            width: 88%;
+            text-align: center;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
+            animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal h2 {
+            color: #fca5a5;
+            font-size: 1.5rem;
+            margin-top: 0;
+            font-weight: 700;
+        }
+
+        .food-recommend {
+            background: linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(16,185,129,0.03) 100%);
+            padding: 18px;
+            border-radius: 18px;
+            margin: 24px 0;
+            font-weight: 700;
+            color: #34d399;
+            font-size: 1.25rem;
+            border: 1px solid rgba(16,185,129,0.25);
+            line-height: 1.4;
+        }
+
+        .quote {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 32px;
+            text-align: justify;
+        }
+
+        .close-btn {
+            background: #f8fafc;
+            color: #0f172a;
+            border: none;
+            padding: 18px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+
+        .close-btn:active {
+            transform: scale(0.97);
+            background: #cbd5e1;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -248,24 +314,52 @@
             <button class="add-btn" onclick="addTodo()">新增</button>
         </div>
 
-        <div class="todo-list" id="todo-list">
-            </div>
+        <div class="todo-list" id="todo-list"></div>
 
         <div class="logout-section">
-            <button class="logout-btn" onclick="forceShutdown()">⚠️ 大腦強制關機登出</button>
+            <button class="logout-btn" onclick="triggerShutdown()">⚠️ 大腦強制關機登出</button>
+        </div>
+    </div>
+
+    <!-- 推薦食物與安慰碎碎念的彈出視窗 -->
+    <div id="overlay" class="overlay">
+        <div class="modal">
+            <h2>大腦關機 · 系統登出成功</h2>
+            <div id="modal-food" class="food-recommend">推薦補給品載入中...</div>
+            <p id="modal-quote" class="quote">碎碎念載入中...</p>
+            <button class="close-btn" onclick="closeModal()">收到底稿，現在關機睡覺</button>
         </div>
     </div>
 
     <script>
-        // 幫主辦 IC 內建的 115Q2 核心任務（完全排除牛肉麵，只留最硬核的科目）
+        // 核心查核項目
         const defaultTasks = [
             "所得稅：核對 DTA/DTL 計算底稿與稅率調整差異",
-            "貼現及放款：看不懂的ECL 減損計提與大額曝險分類",
-            "現金流量表：這數字差異怎麼可以這樣多數字",
-            "IC 職責：確認一年級底稿還要趕進度經理又一直在煩煩煩"
+            "貼現及放款：複核 ECL 減損計提與大額曝險分類",
+            "現金流量表：勾稽直接法與間接法落差數字",
+            "IC 職責：確認 Junior 底稿 review 進度與經理 mail 彙整"
         ];
 
-        // 讀取進度（如果之前有存過，會自動記錄在手機裡）
+        // 推薦食物與碎碎念資料庫（完全沒有牛肉麵！）
+        const shutdownSupplies = [
+            {
+                food: "🍢 超商關東煮：熱湯 + 溫熱大根",
+                quote: "115Q2 的貼現及放款、現金流量表對不起來就先卡著吧！身為扛下整個玉山集團的主辦 IC，你今天對內要 review、對外要面對客戶與經理，大腦早就超載了。去超商盛碗關東煮熱湯，把今天緊繃的壓力跟著熱氣狠狠吐出來。今晚到此為止，辛苦了！"
+            },
+            {
+                food: "🥛 溫熱燕麥奶 或 低咖啡因熱拿鐵",
+                quote: "所得稅的 DTA 和 DTL 計算表是不是在腦袋裡重影了？金融業的所得稅本來就是大魔王，你已經查得夠嚴謹了。大額曝險底稿今晚不會再變了，聽話，喝口溫熱的燕麥奶，把利息收入與複雜的勾稽公式先全部關掉。大腦該負載平衡了。"
+            },
+            {
+                food: "🍫 2片微甜黑巧克力 + 溫開水",
+                quote: "凌晨下班，從信義區或民生東路走出來，台北的街道好空。每個人都跟你說『玉山這案子全靠你了』，主辦 IC 的這份孤獨與重量，只有此時舌尖融化的黑巧克力懂。別想永久性差異了，吃點甜，把委屈吞下去轉化為明天的防禦力，現在快回家睡覺。"
+            },
+            {
+                food: "🥣 鮮美溫熱的清鯛魚湯 或 蛤蜊湯",
+                quote: "撐過了兵荒馬亂的一天，胃需要溫柔的修復。不吃油膩的宵夜折磨身體，來碗清鮮的熱湯。115Q2 的底稿已經留在辦公室了，此時此刻你不再是那個要扛起一切的主辦 IC，你只是你自己。今晚放過大腦，好好睡一覺吧。"
+            }
+        ];
+
         let todos = JSON.parse(localStorage.getItem("esun_todos"));
         if (!todos) {
             todos = defaultTasks.map(task => ({ text: task, completed: false }));
@@ -274,11 +368,9 @@
         function renderTodos() {
             const listEl = document.getElementById("todo-list");
             listEl.innerHTML = "";
-
             todos.forEach((todo, index) => {
                 const item = document.createElement("div");
                 item.className = `todo-item ${todo.completed ? 'completed' : ''}`;
-                
                 item.innerHTML = `
                     <div class="todo-left" onclick="toggleTodo(${index})">
                         <div class="checkbox"></div>
@@ -288,8 +380,6 @@
                 `;
                 listEl.appendChild(item);
             });
-
-            // 儲存至手機本地端，重開網頁網格進度不會不見
             localStorage.setItem("esun_todos", JSON.stringify(todos));
         }
 
@@ -317,11 +407,20 @@
             renderTodos();
         }
 
-        function forceShutdown() {
-            alert("辛苦了！115Q2 帳永遠調不完，但身體要緊。今晚底稿封存，現在立刻登出大腦，關機睡覺！");
+        // 觸發大腦登出功能：隨機推薦食物與慰藉
+        function triggerShutdown() {
+            const randomIndex = Math.floor(Math.random() * shutdownSupplies.length);
+            const supply = shutdownSupplies[randomIndex];
+            
+            document.getElementById("modal-food").innerText = "☕️ 深夜推薦資產：\n" + supply.food;
+            document.getElementById("modal-quote").innerText = supply.quote;
+            document.getElementById("overlay").style.display = "flex";
         }
 
-        // 初始渲染
+        function closeModal() {
+            document.getElementById("overlay").style.display = "none";
+        }
+
         renderTodos();
     </script>
 </body>
