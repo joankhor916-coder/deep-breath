@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>⚡ E.SUN x Chiikawa 特工部隊戰術控制台</title>
+    <title>⚡ E.SUN x 114Q2 x 特工部隊戰術控制台</title>
     <style>
         :root {
-            --bg-color: #020617;
-            --card-bg: rgba(15, 23, 42, 0.8);
-            --border-color: rgba(16, 185, 129, 0.2);
-            --text-main: #f8fafc;
-            --text-sub: #64748b;
+            --bg-color: #0b1329;
+            --card-bg: rgba(28, 37, 65, 0.6);
+            --border-color: rgba(16, 185, 129, 0.25);
+            --text-main: #f1f5f9;
+            --text-sub: #94a3b8;
             --esun-green: #10b981;
             --esun-glow: rgba(16, 185, 129, 0.4);
-            --terminal-red: #ef4444;
+            --terminal-red: #f43f5e;
+            --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'Courier New', Courier, monospace, -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
             padding: 24px 16px;
             min-height: 100vh;
@@ -28,19 +29,9 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
-        }
-
-        .aurora-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 50% 10%, rgba(16, 185, 129, 0.15) 0%, transparent 60%),
-                radial-gradient(circle at 10% 90%, rgba(239, 68, 68, 0.05) 0%, transparent 40%);
-            pointer-events: none;
-            z-index: 1;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
         }
 
         .container {
@@ -52,50 +43,58 @@
 
         header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             border: 1px solid var(--border-color);
-            padding: 16px;
-            background: rgba(15, 23, 42, 0.9);
-            border-radius: 12px;
-            box-shadow: 0 0 15px var(--esun-glow);
+            padding: 20px 16px;
+            background: linear-gradient(135deg, rgba(28, 37, 65, 0.8) 0%, rgba(11, 19, 43, 0.8) 100%);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--panel-shadow), inset 0 1px 0 rgba(255,255,255,0.05);
         }
 
         h1 {
-            font-size: 1.8rem;
-            margin: 0 0 6px 0;
-            font-weight: 700;
-            color: var(--esun-green);
-            text-shadow: 0 0 8px var(--esun-glow);
+            font-size: 1.6rem;
+            margin: 0 0 8px 0;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #fff, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            font-size: 0.9rem;
-            color: #cbd5e1;
+            font-size: 0.85rem;
+            color: #a7f3d0;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             margin-bottom: 12px;
         }
 
         .countdown-box {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            color: #fca5a5;
+            background: rgba(244, 63, 94, 0.1);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #fda4af;
             font-weight: 700;
             display: inline-block;
+            box-shadow: 0 0 10px rgba(244, 63, 94, 0.15);
         }
 
-        /* 職級大分類切換 */
+        /* 頂級職級大分類切換 */
         .level-selector {
             display: flex;
-            background: #0f172a;
-            border: 1px solid var(--border-color);
-            padding: 4px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            gap: 4px;
+            background: rgba(11, 19, 43, 0.9);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 6px;
+            border-radius: 16px;
+            margin-bottom: 14px;
+            gap: 6px;
+            box-shadow: var(--panel-shadow);
         }
 
         .level-btn {
@@ -103,29 +102,28 @@
             background: transparent;
             border: none;
             color: var(--text-sub);
-            padding: 10px 0;
-            border-radius: 8px;
+            padding: 12px 0;
+            border-radius: 12px;
             font-size: 0.8rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .level-btn.active {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--esun-green);
-            border: 1px solid var(--esun-green);
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: #fff;
+            box-shadow: 0 4px 12px var(--esun-glow);
         }
 
         /* Staff 子角色切換 */
         .staff-sub-selector {
             display: flex;
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(28, 37, 65, 0.4);
             border: 1px solid rgba(255,255,255,0.05);
             padding: 4px;
-            border-radius: 12px;
-            margin-bottom: 16px;
+            border-radius: 14px;
+            margin-bottom: 18px;
             gap: 4px;
         }
 
@@ -134,81 +132,97 @@
             background: transparent;
             border: none;
             color: var(--text-sub);
-            padding: 8px 0;
-            border-radius: 8px;
-            font-size: 0.8rem;
+            padding: 10px 0;
+            border-radius: 10px;
+            font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 2px;
+            transition: all 0.2s;
+        }
+
+        .staff-btn:hover {
+            color: #fff;
         }
 
         .staff-btn.active {
-            background: var(--esun-green);
-            color: #020617;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--esun-green);
             font-weight: 700;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
-        /* 物資補給專區 */
+        /* 特工補給專區 */
         .food-helper-box {
-            background: rgba(15, 23, 42, 0.9);
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 14px;
+            border-radius: 20px;
+            padding: 16px;
             margin-bottom: 20px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: var(--panel-shadow);
         }
 
         .food-title {
             font-size: 0.85rem;
             font-weight: 700;
-            color: var(--esun-green);
-            margin-bottom: 10px;
-            letter-spacing: 1px;
+            color: #34d399;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .food-btn-group {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .food-action-btn {
             flex: 1;
-            background: rgba(16, 185, 129, 0.05);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: linear-gradient(135deg, rgba(58, 80, 107, 0.4) 0%, rgba(28, 37, 65, 0.6) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: #e2e8f0;
-            padding: 8px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 12px;
             font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
-            font-family: inherit;
+            transition: all 0.2s;
         }
 
         .food-action-btn:hover {
-            background: rgba(16, 185, 129, 0.15);
             border-color: var(--esun-green);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
         }
 
         .food-result-display {
-            margin-top: 10px;
-            padding: 10px;
-            background: #020617;
-            border-radius: 6px;
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(11, 19, 43, 0.6);
+            border-radius: 10px;
             font-size: 0.85rem;
-            color: #cbd5e1;
+            color: #e2e8f0;
             display: none;
-            border-left: 3px solid var(--esun-green);
-            line-height: 1.4;
+            border-left: 4px solid var(--esun-green);
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
         }
 
         /* 進度條 */
         .progress-container {
-            background: rgba(15, 23, 42, 0.9);
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 14px;
-            border-radius: 14px;
+            padding: 16px;
+            border-radius: 20px;
             margin-bottom: 20px;
+            box-shadow: var(--panel-shadow);
         }
 
         .progress-text-row {
@@ -217,131 +231,146 @@
             font-size: 0.85rem;
             font-weight: 600;
             color: #cbd5e1;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         #progress-percent {
             color: var(--esun-green);
-            font-weight: 700;
+            font-weight: 800;
+            text-shadow: 0 0 8px var(--esun-glow);
         }
 
         .progress-bar-bg {
-            background: #020617;
-            height: 8px;
+            background: #0b1329;
+            height: 10px;
             width: 100%;
-            border-radius: 4px;
+            border-radius: 999px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.05);
         }
 
         .progress-bar-fill {
-            background: var(--esun-green);
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
             height: 100%;
             width: 0%;
-            transition: width 0.4s ease;
-            box-shadow: 0 0 8px var(--esun-glow);
+            border-radius: 999px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px var(--esun-glow);
         }
 
         /* 任務頒布區 */
         .input-section {
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(11, 19, 43, 0.8);
             border: 1px solid var(--border-color);
-            padding: 10px;
-            border-radius: 12px;
+            padding: 10px 14px;
+            border-radius: 16px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 20px;
+            box-shadow: var(--panel-shadow);
         }
 
         .input-section input {
             flex: 1;
             background: transparent;
             border: none;
-            color: var(--text-main);
+            color: #fff;
             font-size: 0.95rem;
-            padding: 6px;
             outline: none;
-            font-family: inherit;
         }
 
         .input-section input::placeholder {
-            color: #475569;
+            color: #64748b;
         }
 
         .add-btn {
-            background: var(--esun-green);
-            color: #020617;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
             border: none;
-            border-radius: 8px;
-            padding: 0 16px;
+            border-radius: 10px;
+            padding: 0 18px;
             font-weight: 700;
             cursor: pointer;
-            font-family: inherit;
             font-size: 0.85rem;
+            transition: opacity 0.2s;
         }
 
-        /* 待辦項目 */
+        .add-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* 待辦項目清單 */
         .todo-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 30px;
         }
 
         .todo-item {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 14px;
-            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 16px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: var(--panel-shadow);
+            transition: all 0.2s;
+        }
+
+        .todo-item:hover {
+            border-color: rgba(16, 185, 129, 0.2);
+            transform: translateX(2px);
         }
 
         .todo-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             flex: 1;
+            cursor: pointer;
         }
 
         .checkbox {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border: 2px solid #475569;
-            border-radius: 4px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(11, 19, 43, 0.4);
         }
 
         .todo-text {
             font-size: 0.95rem;
-            line-height: 1.4;
+            line-height: 1.5;
             color: #e2e8f0;
         }
 
         .todo-item.completed {
-            border-color: rgba(16, 185, 129, 0.1);
-            background: rgba(15, 23, 42, 0.3);
+            border-color: rgba(255,255,255,0.02);
+            background: rgba(28, 37, 65, 0.25);
         }
 
         .todo-item.completed .checkbox {
-            background: var(--esun-green);
-            border-color: var(--esun-green);
+            background: #10b981;
+            border-color: #10b981;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
         }
 
         .todo-item.completed .checkbox::after {
             content: "✓";
-            color: #020617;
+            color: #fff;
             font-size: 0.85rem;
             font-weight: 900;
         }
 
         .todo-item.completed .todo-text {
             text-decoration: line-through;
-            color: #475569;
+            color: #64748b;
         }
 
         .delete-btn {
@@ -349,32 +378,38 @@
             border: none;
             color: var(--terminal-red);
             cursor: pointer;
-            opacity: 0.5;
-            padding: 4px 8px;
-            font-family: inherit;
+            opacity: 0.4;
+            padding: 6px;
+            font-size: 1rem;
+            transition: opacity 0.2s;
         }
 
-        /* 強制解鎖關機 */
+        .delete-btn:hover {
+            opacity: 1;
+        }
+
+        /* 安全撤離按鈕 */
         .logout-btn {
-            background: rgba(30, 41, 59, 0.5);
+            background: rgba(30, 41, 59, 0.4);
             border: 1px solid rgba(255,255,255,0.05);
             color: #475569;
-            padding: 14px;
-            border-radius: 14px;
+            padding: 16px;
+            border-radius: 16px;
             font-size: 0.95rem;
             font-weight: 700;
             cursor: not-allowed;
             width: 100%;
-            font-family: inherit;
             letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: var(--panel-shadow);
         }
 
         .logout-btn.ready {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid var(--terminal-red);
-            color: #fca5a5;
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            border: none;
+            color: #fff;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
+            box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
         }
 
         /* 彈出視窗 */
@@ -385,63 +420,66 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(2, 6, 23, 0.98);
+            background: rgba(11, 19, 43, 0.95);
             justify-content: center;
             align-items: center;
             z-index: 10;
+            backdrop-filter: blur(8px);
         }
 
         .modal {
-            background: #0f172a;
+            background: #1c2541;
             border: 1px solid var(--border-color);
-            padding: 24px;
-            border-radius: 16px;
+            padding: 28px 24px;
+            border-radius: 24px;
             max-width: 340px;
             width: 88%;
             text-align: center;
-            box-shadow: 0 0 30px var(--esun-glow);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
         .food-recommend {
             background: rgba(16, 185, 129, 0.1);
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 12px;
             margin: 16px 0;
             font-weight: 700;
-            color: var(--esun-green);
-            border: 1px solid var(--border-color);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         .quote {
             font-size: 0.9rem;
             color: #cbd5e1;
             line-height: 1.6;
-            margin-bottom: 20px;
-            text-align: justify;
+            margin-bottom: 24px;
         }
 
         .close-btn {
-            background: var(--esun-green);
-            color: #020617;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: #fff;
             border: none;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 12px;
             font-weight: 700;
             width: 100%;
-            font-family: inherit;
             cursor: pointer;
+            box-shadow: 0 4px 12px var(--esun-glow);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div class="aurora-bg"></div>
-
     <div class="container">
         <header>
             <h1>⚡ OPERATION E.SUN Q2</h1>
-            <div class="subtitle">玉山營業部 · 特工部隊行動控制台</div>
-            <div class="countdown-box" id="countdown-display">⏳ 距離 8/14 死線突擊：計算中...</div>
+            <div class="subtitle">玉山營業部 · 特工部隊控制台</div>
+            <div class="countdown-box" id="countdown-display">⏳ 距離 死線決戰：計算中...</div>
         </header>
 
         <!-- 第一層：部隊編制切換 -->
@@ -449,7 +487,7 @@
             <button class="level-btn active" id="lvl-ic" onclick="switchLevel('ic')">指揮官 吉伊 🐹</button>
             <button class="level-btn" id="lvl-staff" onclick="switchLevel('staff')">突擊前線 (Staff)</button>
             <button class="level-btn" id="lvl-manager" onclick="switchLevel('manager')">戰術參謀 🐰</button>
-            <button class="level-btn" id="lvl-partner" onclick="switchLevel('partner')">統帥 栗子 🌰</button>
+            <button class="level-btn" id="lvl-partner" onclick="switchLevel('partner')">最高統帥 🌰</button>
         </div>
 
         <!-- 第二層：突擊前線部隊代號 -->
@@ -460,12 +498,12 @@
             <button class="staff-btn" data-staff="kuhon" onclick="switchStaff('kuhon')"><span>🐷</span><span>古本屋隊員</span></button>
         </div>
 
-        <!-- 特工補給專區 -->
+        <!-- 特工物資補給專區 -->
         <div class="food-helper-box">
-            <div class="food-title">📡 SECURE SUPPLY // 民生東路三段物資補給</div>
+            <div class="food-title">📦 SECURE SUPPLY // 戰地物資補給庫</div>
             <div class="food-btn-group">
-                <button class="food-action-btn" onclick="getRandomFood('lunch')">🏃‍♂️ 戰地極速外帶 (中午)</button>
-                <button class="food-action-btn" onclick="getRandomFood('drink')">📱 空投續命手搖 (下午)</button>
+                <button class="food-action-btn" onclick="getRandomFood('lunch')">🥪 中午吃啥 (食物類型)</button>
+                <button class="food-action-btn" onclick="getRandomFood('drink')">🥤 下午茶 (台灣手搖天團)</button>
             </div>
             <div id="food-result" class="food-result-display"></div>
         </div>
@@ -499,23 +537,23 @@
     <!-- 行動回報彈出視窗 -->
     <div id="overlay" class="overlay">
         <div class="modal">
-            <h2 style="color: var(--esun-green); margin-top:0;">💥 TACTICAL CLEAR // 討伐成功</h2>
+            <h2 style="color: #34d399; margin-top:0; font-weight: 800;">💥 TACTICAL CLEAR</h2>
             <div id="modal-title" class="food-recommend"></div>
             <p id="modal-quote" class="quote"></p>
-            <button class="close-btn" onclick="closeModal()">⚡「哇…（安全撤離，強制斷電！）」</button>
+            <button class="close-btn" onclick="closeModal()">⚡「安全撤離，強制斷電！」</button>
         </div>
     </div>
 
     <script>
         // 特工行動原始設定集
         const defaultTasks = {
-            "ic": ["[⚔️核心突擊] 攻克大魔王所得稅模組，核對 DTA/DTL 調整差異", "[⚔️關鍵防線] 編製現金流量表，絕對勾稽平齊直接法與間接法落差", "[📡戰術指揮] 監控前線 Staff 特工部隊的底稿查核進度"],
-            "staff_usagi": ["[🏃‍♂️極速抽樣] 配合火網掩護，以烏拉的速度將全部放款傳票抽調完畢", "[🏃‍♂️金流攻佔] 點收期末對帳單，核對完畢發出「呀哈！」的勝利咆哮"],
-            "staff_hachiware": ["[🐱戰地救援] 溫柔跟催詢證函回函進度，並將敵情完整掃描建檔", "[🐱後勤支援] 安撫與掩護旁邊因為數字對不起來在流淚的同袍"],
-            "staff_mome": ["[🐿️情報美化] 執行底稿視覺偽裝，將排版調整至最完美、最可愛程度", "[🐿️心理防禦] 吃掉敵方零食，用可愛的微笑化解長官查堂的加班氣壓"],
-            "staff_kuhon": ["[🐷戰術整理] 默默將後方雜亂的傳票分門別類，排成整齊的防衛陣形", "[🐷物資跟進] 監控並準備好下午茶的空投 UberEats 訂單清單"],
-            "manager": ["[👔戰術覆核] 審查由指揮官吉伊卡哇提交的重大調整科目底稿", "[👔外交斡旋] 親自與玉山高層窗口通話，強攻突擊尚未收回的大額詢證函"],
-            "partner": ["🌰 [最終簽核] 於 115Q2 玉山財報核閱報告上簽署最高統帥印鑑", "🌰 [風險裁決] 針對大額貼現與放款之 ECL 呆帳提列發動最終核准指令"]
+            "ic": ["[⚔️核心突擊] 攻克大魔王所得稅，要怎麼調DTA/DTL", "[⚔️關鍵防線] 編製現金流量表，這科目怎麼還是有差啊", "[📡戰術指揮] 監控Staff特工部隊的查核進度"],
+            "staff_usagi": ["銀行合併] 三家子公司沖銷=認準顏色分啊分", "創投] 都這做了一年了，「呀哈！」這簡單啦"],
+            "staff_hachiware": ["[🐱三商救援] 我會回來玉山的！", "[🐱支援] 時不時來問候一下玉山的兄弟們"],
+            "staff_mome": ["函證] 理解，我知道要怎麼快速發函證了！", "[🐿️心理防禦] 吃掉敵方零食"],
+            "staff_kuhon": ["[🐷戰術整理] 關係人和不動產是我的第一門課", "[🐷物資跟進] 我接下來要幹嘛呢"],
+            "manager": ["[👔戰術覆核] 我要先學會閉嘴下來做事了", "[👔外交斡旋] 客戶怎麼又來找我了好煩啊"],
+            "partner": ["🌰 [最終簽核] 我要學會不龜毛不要下那麼多note", "🌰 [風險裁決] 我只要不龜毛就好了"]
         };
 
         const roleMeta = {
@@ -528,24 +566,31 @@
             "partner": { name: "最高統帥 栗子饅頭 🌰", done: "哈啊——！（吐氣）報告簽核完畢！今晚最完美的特工配置就是立刻撤離，回去享受大叔般的深夜安穩睡眠！" }
         };
 
+        // 在地化擴充物資庫
         const foodDatabase = {
             lunch: [
-                "🍱 慶城海南雞飯（1號餐极速外帶，回基地快速補給）",
-                "🍛 興安街 家鄉四川抄手麵（辣度全開，強力抗壓）",
-                "🍜 興安街 3元6青蛙湯/虱目魚粥（深夜突擊的熱湯防禦）",
-                "🍲 包記饅頭 或 附近的排骨便當（厚實高熱量，迎戰高強度查核）"
+                "🏪 7-11 極速應援（御飯糰/國民便當/關東煮，快速回基地補給）",
+                "🏪 全家 便利應援（夯番薯/微波義大利麵/健康餐盒，便利續命）",
+                "🍜 熱騰騰雞塊麵（炸雞塊配爽口湯麵，戰地奢華抗壓餐）",
+                "🍢 罪惡大滷味（自由夾取蔬菜火鍋料，百搭加辣首選）",
+                "🥗 少油少鹽健康餐盒（雞胸肉/紫米飯，維持清晰作戰大腦）",
+                "🍛 濃郁系咖哩飯（厚實醬汁，迎戰高強度查核）",
+                "🥟 爆汁鍋貼水餃（快狠準高熱量，特工最愛速食）"
             ],
             drink: [
-                "🥤 得正 Oolong Tea（空投焙烏龍加茶凍，續命神物）",
-                "🧋 約翰紅茶公司（點煮濃那鐵，用濃郁乳香麻痺數字痛苦）",
-                "🍵 烏弄 UNOCHA（金萱冬片無糖，保持神經高度清醒）",
-                "🍋 麻古茶坊（芝芝系列，快樂多酚大暴走）"
+                "🧋 台灣經典手搖（五十嵐 / 清心福全 - 烏龍綠加珍波椰）",
+                "🥤 熟成紅茶美學（可不可熟成紅茶 - 熟成歐蕾）",
+                "🍵 純茶系天花板（烏弄 / 得正 - 焙烏龍加茶凍）",
+                "🍼 濃厚系鮮奶茶（約翰紅茶公司 / 珍煮丹 - 煮濃那鐵）",
+                "🍇 快樂多酚大暴走（麻古茶坊 / 五桐號 - 芝芝果粒系列）",
+                "🥛 嚴選文青鮮乳（迷客夏 - 珍珠鮮奶綠）",
+                "🍋 在地新鮮果茶（一芳 / 大苑子 - 翡翠檸檬）"
             ]
         };
 
         let currentLevel = localStorage.getItem("tg_lvl") || "ic"; 
         let currentStaff = localStorage.getItem("tg_stf") || "usagi"; 
-        let allTodos = JSON.parse(localStorage.getItem("tg_todos_v5")) || {};
+        let allTodos = JSON.parse(localStorage.getItem("tg_todos_v6")) || {};
 
         function getActiveKey() {
             return currentLevel === "staff" ? `staff_${currentStaff}` : currentLevel;
@@ -601,11 +646,11 @@
             const btn = document.getElementById("shutdown-btn");
             if (pct === 100 && total > 0) {
                 btn.classList.add("ready");
-                btn.innerText = "⚠️ TACTICAL CLEAR // 解鎖大腦強制關機撤離";
+                btn.innerText = "💥 ACTION COMPLETE // 解鎖安全關機撤離";
                 btn.disabled = false;
             } else {
                 btn.classList.remove("ready");
-                btn.innerText = `🔒 請先解除所有威脅項目以解鎖撤離 (${done}/${total})`;
+                btn.innerText = `🔒 請先消除所有威脅項目以解鎖撤離 (${done}/${total})`;
                 btn.disabled = true;
             }
         }
@@ -629,7 +674,7 @@
                 listEl.appendChild(item);
             });
 
-            localStorage.setItem("tg_todos_v5", JSON.stringify(allTodos));
+            localStorage.setItem("tg_todos_v6", JSON.stringify(allTodos));
             updateProgress();
         }
 
@@ -653,7 +698,7 @@
             const res = list[Math.floor(Math.random() * list.length)];
             const el = document.getElementById("food-result");
             el.style.display = "block";
-            el.innerHTML = type === 'lunch' ? `📡 <b>戰地物資報告：</b><br>${res}` : `📡 <b>空投能量補給：</b><br>${res}`;
+            el.innerHTML = type === 'lunch' ? `📦 <b>戰地物資隨機雷達：</b><br>${res}` : `🥤 <b>空投手搖隨機雷達：</b><br>${res}`;
         }
 
         function updateCountdown() {
