@@ -12,7 +12,7 @@
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
             --esun-green: #10b981;
-            --esun-glow: rgba(16, 185, 129, 0.15);
+            --esun-glow: rgba(16, 185, 129, 0.25);
         }
 
         body {
@@ -52,7 +52,7 @@
 
         header {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         h1 {
@@ -67,16 +67,31 @@
             color: var(--esun-green);
             font-weight: 600;
             letter-spacing: 0.5px;
+            margin-bottom: 12px;
         }
 
-        /* 職位切換橫條（正名：IC, Staff, 經理） */
+        /* 倒數計時器樣式 */
+        .countdown-box {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: #34d399;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 職位切換橫條（加入會計師） */
         .role-selector {
             display: flex;
             background: rgba(15, 23, 42, 0.8);
             border: 1px solid var(--border-color);
             padding: 4px;
             border-radius: 16px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             gap: 4px;
         }
 
@@ -85,9 +100,9 @@
             background: transparent;
             border: none;
             color: var(--text-sub);
-            padding: 12px 4px;
+            padding: 12px 2px;
             border-radius: 12px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
@@ -98,6 +113,48 @@
             background: var(--esun-green);
             color: #042f1a;
             box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        /* 進度條外殼 */
+        .progress-container {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .progress-text-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+        }
+
+        #progress-percent {
+            color: var(--esun-green);
+            font-weight: 700;
+        }
+
+        .progress-bar-bg {
+            background: #1e293b;
+            height: 10px;
+            width: 100%;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: var(--esun-green);
+            height: 100%;
+            width: 0%;
+            border-radius: 999px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 12px var(--esun-glow);
         }
 
         /* 輸入框區塊 */
@@ -319,13 +376,27 @@
         <header>
             <h1>💚 E.SUN Workspace</h1>
             <div class="subtitle">玉山集團 115Q2 · 深夜戰術檯</div>
+            <!-- 倒數計時區 -->
+            <div class="countdown-box" id="countdown-display">⏳ 距離 8/14 報告日：計算中...</div>
         </header>
 
-        <!-- 職位一鍵切換列（正名版） -->
+        <!-- 職位一鍵切換列（加入會計師） -->
         <div class="role-selector">
             <button class="role-btn active" data-role="ic" onclick="switchRole('ic')">IC</button>
             <button class="role-btn" data-role="staff" onclick="switchRole('staff')">Staff</button>
             <button class="role-btn" data-role="manager" onclick="switchRole('manager')">經理</button>
+            <button class="role-btn" data-role="partner" onclick="switchRole('partner')">會計師</button>
+        </div>
+
+        <!-- 實時任務進度條 -->
+        <div class="progress-container">
+            <div class="progress-text-row">
+                <span>當前職級任務完成度</span>
+                <span id="progress-percent">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
         </div>
 
         <div class="input-section">
@@ -350,7 +421,7 @@
     </div>
 
     <script>
-        // 正名後的預設核心清單
+        // 包含會計師的預設核心清單
         const roleTasks = {
             ic: [
                 "所得稅：核對 DTA/DTL 計算底稿與稅率調整差異",
@@ -367,10 +438,14 @@
                 "進度督導：審查 IC 送出之 115Q2 核心科目重大調整",
                 "客戶溝通：與玉山窗口協調未送達之詢證函與財報揭露細項",
                 "風險控制：全面評估本季貼現放款之備抵呆帳提列合理性"
+            ],
+            partner: [
+                "最終簽核：覆核經理與 IC 提報之 115Q2 玉山財報與重要揭露",
+                "策略複核：針對重大放款 ECL 減損提列與所得稅差異進行最後指導",
+                "客戶溝通：與玉山高層、審計委員會進行審計結果關鍵溝通"
             ]
         };
 
-        // 食物補給資料庫（完全無牛肉麵）
         const shutdownSupplies = [
             { food: "🍢 超商關東煮：熱湯 + 溫熱大根", quote: "115Q2 的玉山案件帳很大、很雜，但今晚你的進度已經做得很棒了。不管是調不平的現金流量表、還是對不完的放款，現在全部留在辦公室。去超商盛碗熱湯，暖暖胃，這才是今晚最迫切的資產配置。" },
             { food: "🥛 溫熱燕麥奶 或 低咖啡因熱拿鐵", quote: "大魔王所得稅的遞延資產負債公式、還有複雜的詢證函是不是在腦袋裡打轉？身為玉山案件的一員，你頂著高壓運轉一整天，大腦該進行負載平衡了。喝杯熱奶，把數字開關切斷，好好睡一覺。" },
@@ -381,8 +456,8 @@
         let currentRole = localStorage.getItem("esun_current_role") || "ic";
         let allRoleTodos = JSON.parse(localStorage.getItem("esun_all_todos")) || {};
 
-        // 如果快取中是舊版角色(如junior/senior)，則清空重置
-        if (allRoleTodos.junior || allRoleTodos.senior) {
+        // 如果快取中沒有 partner，或者結構需要更新，重新初始化
+        if (!allRoleTodos.partner) {
             allRoleTodos = {};
         }
 
@@ -392,10 +467,16 @@
             });
         }
 
-        // 如果 currentRole 還是舊版的，修正為預設 ic
-        if (!roleTasks[currentRole]) {
-            currentRole = "ic";
-            localStorage.setItem("esun_current_role", "ic");
+        // 計算並更新進度條
+        function updateProgressBar() {
+            const todos = allRoleTodos[currentRole] || [];
+            const total = todos.length;
+            const completed = todos.filter(t => t.completed).length;
+            
+            let percent = total === 0 ? 0 : Math.round((completed / total) * 100);
+            
+            document.getElementById("progress-percent").innerText = `${percent}%`;
+            document.getElementById("progress-fill").style.width = `${percent}%`;
         }
 
         function renderTodos() {
@@ -416,6 +497,7 @@
                 listEl.appendChild(item);
             });
             localStorage.setItem("esun_all_todos", JSON.stringify(allRoleTodos));
+            updateProgressBar();
         }
 
         function switchRole(role) {
@@ -424,7 +506,6 @@
             
             document.querySelectorAll(".role-btn").forEach(btn => btn.classList.remove("active"));
             
-            // 處理點擊與初始載入的 active 樣式切換
             if (window.event && window.event.target && window.event.target.classList.contains("role-btn")) {
                 window.event.target.classList.add("active");
             } else {
@@ -445,8 +526,34 @@
         }
 
         function handleKeyPress(e) { if (e.key === "Enter") addTodo(); }
-        function toggleTodo(index) { allRoleTodos[currentRole][index].completed = !allRoleTodos[currentRole][index].completed; renderTodos(); }
-        function deleteTodo(index) { allRoleTodos[currentRole].splice(index, 1); renderTodos(); }
+        
+        function toggleTodo(index) { 
+            allRoleTodos[currentRole][index].completed = !allRoleTodos[currentRole][index].completed; 
+            renderTodos(); 
+        }
+        
+        function deleteTodo(index) { 
+            allRoleTodos[currentRole].splice(index, 1); 
+            renderTodos(); 
+        }
+
+        // 8/14 報告日倒數功能
+        function updateCountdown() {
+            const targetDate = new Date("2026-08-14T00:00:00+08:00");
+            const now = new Date();
+            const timeDiff = targetDate - now;
+
+            if (timeDiff <= 0) {
+                document.getElementById("countdown-display").innerText = "🎉 8/14 報告日已到！大功告成！";
+                return;
+            }
+
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById("countdown-display").innerText = `⏳ 距離 8/14 報告日：${days} 天 ${hours} 小時 ${mins} 分`;
+        }
 
         function triggerShutdown() {
             const randomIndex = Math.floor(Math.random() * shutdownSupplies.length);
@@ -467,6 +574,9 @@
                 }
             });
             renderTodos();
+            updateCountdown();
+            // 每分鐘更新一次倒數計時
+            setInterval(updateCountdown, 60000);
         });
     </script>
 </body>
