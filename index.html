@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🌙 IC Workspace</title>
+    <title>💚 E.SUN Workspace</title>
     <style>
         :root {
             --bg-color: #060a12;
@@ -29,7 +29,7 @@
             overflow-x: hidden;
         }
 
-        /* 頂級極光背景層 */
+        /* 翡翠極光背景 */
         .aurora-bg {
             position: fixed;
             top: 0;
@@ -37,8 +37,8 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.12) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.06) 0%, transparent 50%);
             pointer-events: none;
             z-index: 1;
         }
@@ -52,8 +52,7 @@
 
         header {
             text-align: center;
-            margin-bottom: 28px;
-            margin-top: 10px;
+            margin-bottom: 24px;
         }
 
         h1 {
@@ -68,6 +67,37 @@
             color: var(--esun-green);
             font-weight: 600;
             letter-spacing: 0.5px;
+        }
+
+        /* 職位切換橫條（正名：IC, Staff, 經理） */
+        .role-selector {
+            display: flex;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 4px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            gap: 4px;
+        }
+
+        .role-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            padding: 12px 4px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .role-btn.active {
+            background: var(--esun-green);
+            color: #042f1a;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
         }
 
         /* 輸入框區塊 */
@@ -110,10 +140,6 @@
             transition: all 0.2s;
         }
 
-        .add-btn:active {
-            transform: scale(0.95);
-        }
-
         /* 列表區塊 */
         .todo-list {
             display: flex;
@@ -133,7 +159,6 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
         }
 
         .todo-left {
@@ -152,7 +177,6 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s;
             flex-shrink: 0;
         }
 
@@ -212,16 +236,10 @@
             cursor: pointer;
             width: 100%;
             box-sizing: border-box;
-            transition: all 0.2s;
             box-shadow: 0 4px 20px rgba(239, 68, 68, 0.15);
         }
 
-        .logout-btn:active {
-            background: rgba(239, 68, 68, 0.25);
-            transform: scale(0.97);
-        }
-
-        /* 推薦食物彈出視窗（Modal）樣式 */
+        /* 彈出視窗 */
         .overlay {
             display: none;
             position: fixed;
@@ -287,12 +305,6 @@
             font-weight: 700;
             width: 100%;
             font-size: 1.1rem;
-            transition: all 0.2s;
-        }
-
-        .close-btn:active {
-            transform: scale(0.97);
-            background: #cbd5e1;
         }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -305,9 +317,16 @@
 
     <div class="container">
         <header>
-            <h1>🌙 Task Counter</h1>
-            <div class="subtitle">E.SUN 115Q2 · 主辦 IC 戰術檯</div>
+            <h1>💚 E.SUN Workspace</h1>
+            <div class="subtitle">玉山集團 115Q2 · 深夜戰術檯</div>
         </header>
+
+        <!-- 職位一鍵切換列（正名版） -->
+        <div class="role-selector">
+            <button class="role-btn active" data-role="ic" onclick="switchRole('ic')">IC</button>
+            <button class="role-btn" data-role="staff" onclick="switchRole('staff')">Staff</button>
+            <button class="role-btn" data-role="manager" onclick="switchRole('manager')">經理</button>
+        </div>
 
         <div class="input-section">
             <input type="text" id="todo-input" placeholder="新增今晚必做查核項目..." onkeypress="handleKeyPress(event)">
@@ -321,7 +340,6 @@
         </div>
     </div>
 
-    <!-- 推薦食物與安慰碎碎念的彈出視窗 -->
     <div id="overlay" class="overlay">
         <div class="modal">
             <h2>大腦關機 · 系統登出成功</h2>
@@ -332,42 +350,59 @@
     </div>
 
     <script>
-        // 核心查核項目
-        const defaultTasks = [
-            "所得稅：核對 DTA/DTL 計算底稿與稅率調整差異",
-            "貼現及放款：複核 ECL 減損計提與大額曝險分類",
-            "現金流量表：勾稽直接法與間接法落差數字",
-            "IC 職責：確認 Junior 底稿 review 進度與經理 mail 彙整"
-        ];
+        // 正名後的預設核心清單
+        const roleTasks = {
+            ic: [
+                "所得稅：核對 DTA/DTL 計算底稿與稅率調整差異",
+                "貼現及放款：複核 ECL 減損計提與大額曝險分類",
+                "現金流量表：勾稽直接法與間接法落差數字",
+                "IC 職責：確認 Staff 底稿 review 進度與經理 mail 彙整"
+            ],
+            staff: [
+                "現金及約當現金：核對玉山銀行期末存款詢證函與對帳單",
+                "貼現及放款：拉取傳票進行抽樣，確認利息收入與授信借款合約",
+                "基本查核：完成放款大戶基本資料、營業活動資產負債變動明細"
+            ],
+            manager: [
+                "進度督導：審查 IC 送出之 115Q2 核心科目重大調整",
+                "客戶溝通：與玉山窗口協調未送達之詢證函與財報揭露細項",
+                "風險控制：全面評估本季貼現放款之備抵呆帳提列合理性"
+            ]
+        };
 
-        // 推薦食物與碎碎念資料庫（完全沒有牛肉麵！）
+        // 食物補給資料庫（完全無牛肉麵）
         const shutdownSupplies = [
-            {
-                food: "🍢 超商關東煮：熱湯 + 溫熱大根",
-                quote: "115Q2 的貼現及放款、現金流量表對不起來就先卡著吧！身為扛下整個玉山集團的主辦 IC，你今天對內要 review、對外要面對客戶與經理，大腦早就超載了。去超商盛碗關東煮熱湯，把今天緊繃的壓力跟著熱氣狠狠吐出來。今晚到此為止，辛苦了！"
-            },
-            {
-                food: "🥛 溫熱燕麥奶 或 低咖啡因熱拿鐵",
-                quote: "所得稅的 DTA 和 DTL 計算表是不是在腦袋裡重影了？金融業的所得稅本來就是大魔王，你已經查得夠嚴謹了。大額曝險底稿今晚不會再變了，聽話，喝口溫熱的燕麥奶，把利息收入與複雜的勾稽公式先全部關掉。大腦該負載平衡了。"
-            },
-            {
-                food: "🍫 2片微甜黑巧克力 + 溫開水",
-                quote: "凌晨下班，從信義區或民生東路走出來，台北的街道好空。每個人都跟你說『玉山這案子全靠你了』，主辦 IC 的這份孤獨與重量，只有此時舌尖融化的黑巧克力懂。別想永久性差異了，吃點甜，把委屈吞下去轉化為明天的防禦力，現在快回家睡覺。"
-            },
-            {
-                food: "🥣 鮮美溫熱的清鯛魚湯 或 蛤蜊湯",
-                quote: "撐過了兵荒馬亂的一天，胃需要溫柔的修復。不吃油膩的宵夜折磨身體，來碗清鮮的熱湯。115Q2 的底稿已經留在辦公室了，此時此刻你不再是那個要扛起一切的主辦 IC，你只是你自己。今晚放過大腦，好好睡一覺吧。"
-            }
+            { food: "🍢 超商關東煮：熱湯 + 溫熱大根", quote: "115Q2 的玉山案件帳很大、很雜，但今晚你的進度已經做得很棒了。不管是調不平的現金流量表、還是對不完的放款，現在全部留在辦公室。去超商盛碗熱湯，暖暖胃，這才是今晚最迫切的資產配置。" },
+            { food: "🥛 溫熱燕麥奶 或 低咖啡因熱拿鐵", quote: "大魔王所得稅的遞延資產負債公式、還有複雜的詢證函是不是在腦袋裡打轉？身為玉山案件的一員，你頂著高壓運轉一整天，大腦該進行負載平衡了。喝杯熱奶，把數字開關切斷，好好睡一覺。" },
+            { food: "🍫 2片微甜黑巧克力 + 溫開水", quote: "下班從信義區或民生東路走出來，台北深夜的夜風特別冷清。每個人都盯著進度，但只有此時舌尖融化的黑巧克力懂你的辛苦。別想財報永久性差異或底稿了，吞下這口甜，今天你已經對得起所有人了。" },
+            { food: "🥣 鮮美溫熱的清鯛魚湯 或 蛤蜊湯", quote: "撐過了高強度的查核大戰，胃需要溫柔的修復。不要吃油膩宵夜，來碗清鮮熱湯。115Q2 的死線明天再說，今晚你的靈魂要點擊登出，好好睡一覺，辛苦了！" }
         ];
 
-        let todos = JSON.parse(localStorage.getItem("esun_todos"));
-        if (!todos) {
-            todos = defaultTasks.map(task => ({ text: task, completed: false }));
+        let currentRole = localStorage.getItem("esun_current_role") || "ic";
+        let allRoleTodos = JSON.parse(localStorage.getItem("esun_all_todos")) || {};
+
+        // 如果快取中是舊版角色(如junior/senior)，則清空重置
+        if (allRoleTodos.junior || allRoleTodos.senior) {
+            allRoleTodos = {};
+        }
+
+        if (Object.keys(allRoleTodos).length === 0) {
+            Object.keys(roleTasks).forEach(role => {
+                allRoleTodos[role] = roleTasks[role].map(task => ({ text: task, completed: false }));
+            });
+        }
+
+        // 如果 currentRole 還是舊版的，修正為預設 ic
+        if (!roleTasks[currentRole]) {
+            currentRole = "ic";
+            localStorage.setItem("esun_current_role", "ic");
         }
 
         function renderTodos() {
             const listEl = document.getElementById("todo-list");
             listEl.innerHTML = "";
+            const todos = allRoleTodos[currentRole] || [];
+
             todos.forEach((todo, index) => {
                 const item = document.createElement("div");
                 item.className = `todo-item ${todo.completed ? 'completed' : ''}`;
@@ -380,48 +415,59 @@
                 `;
                 listEl.appendChild(item);
             });
-            localStorage.setItem("esun_todos", JSON.stringify(todos));
+            localStorage.setItem("esun_all_todos", JSON.stringify(allRoleTodos));
+        }
+
+        function switchRole(role) {
+            currentRole = role;
+            localStorage.setItem("esun_current_role", role);
+            
+            document.querySelectorAll(".role-btn").forEach(btn => btn.classList.remove("active"));
+            
+            // 處理點擊與初始載入的 active 樣式切換
+            if (window.event && window.event.target && window.event.target.classList.contains("role-btn")) {
+                window.event.target.classList.add("active");
+            } else {
+                const activeBtn = document.querySelector(`.role-btn[data-role="${role}"]`);
+                if (activeBtn) activeBtn.classList.add("active");
+            }
+            renderTodos();
         }
 
         function addTodo() {
             const input = document.getElementById("todo-input");
             const text = input.value.trim();
             if (text) {
-                todos.unshift({ text: text, completed: false });
+                allRoleTodos[currentRole].unshift({ text: text, completed: false });
                 input.value = "";
                 renderTodos();
             }
         }
 
-        function handleKeyPress(e) {
-            if (e.key === "Enter") addTodo();
-        }
+        function handleKeyPress(e) { if (e.key === "Enter") addTodo(); }
+        function toggleTodo(index) { allRoleTodos[currentRole][index].completed = !allRoleTodos[currentRole][index].completed; renderTodos(); }
+        function deleteTodo(index) { allRoleTodos[currentRole].splice(index, 1); renderTodos(); }
 
-        function toggleTodo(index) {
-            todos[index].completed = !todos[index].completed;
-            renderTodos();
-        }
-
-        function deleteTodo(index) {
-            todos.splice(index, 1);
-            renderTodos();
-        }
-
-        // 觸發大腦登出功能：隨機推薦食物與慰藉
         function triggerShutdown() {
             const randomIndex = Math.floor(Math.random() * shutdownSupplies.length);
             const supply = shutdownSupplies[randomIndex];
-            
             document.getElementById("modal-food").innerText = "☕️ 深夜推薦資產：\n" + supply.food;
             document.getElementById("modal-quote").innerText = supply.quote;
             document.getElementById("overlay").style.display = "flex";
         }
 
-        function closeModal() {
-            document.getElementById("overlay").style.display = "none";
-        }
+        function closeModal() { document.getElementById("overlay").style.display = "none"; }
 
-        renderTodos();
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".role-btn").forEach(btn => {
+                if (btn.getAttribute("data-role") === currentRole) {
+                    btn.classList.add("active");
+                } else {
+                    btn.classList.remove("active");
+                }
+            });
+            renderTodos();
+        });
     </script>
 </body>
 </html>
