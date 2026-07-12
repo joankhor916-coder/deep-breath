@@ -134,7 +134,7 @@
             animation: fadeIn 0.3s ease;
         }
 
-        /* 🛠️ 新增：特工查核實用工具箱 */
+        /* 🛠️ 特工查核實用工具箱 */
         .utility-box {
             background: rgba(59, 130, 246, 0.1);
             border: 1px solid rgba(59, 130, 246, 0.25);
@@ -159,7 +159,7 @@
         .util-row {
             display: flex;
             gap: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .util-input {
@@ -194,6 +194,31 @@
             color: #94a3b8;
             margin-bottom: 4px;
             padding-left: 2px;
+        }
+
+        /* 💰 萬億中文化顯示框 */
+        .chinese-num-preview {
+            background: rgba(11, 19, 43, 0.8);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            color: #38bdf8;
+            font-weight: 700;
+            min-height: 20px;
+            word-break: break-all;
+            margin-bottom: 12px;
+        }
+
+        /* 兩數差異值顯示 */
+        #diff-output {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #f43f5e;
+            display: flex;
+            align-items: center;
+            min-width: 60px;
+            justify-content: center;
         }
 
         /* 心態續命專區 */
@@ -567,7 +592,6 @@
             <div class="countdown-box" id="countdown-display">⏳ 距離 死線決戰：計算中...</div>
         </header>
 
-        <!-- 集體行動補給專區 -->
         <div class="food-helper-box">
             <div class="food-btn-group">
                 <button class="food-action-btn" onclick="getRandomFood('lunch')">🥪 集體中午吃啥？</button>
@@ -576,33 +600,29 @@
             <div id="food-result" class="food-result-display"></div>
         </div>
 
-        <!-- 🛠️ 查核特工實用急救包 -->
         <div class="utility-box">
-            <div class="util-title">🛠️ 特工查核前線急救包</div>
+            <div class="util-title">🛠️ 特工查核前線工具箱</div>
             
-            <!-- 功能一：千分位極速轉換 -->
-            <div class="util-result-label">1. 千分位格式化 (輸入數字自動轉換)</div>
+            <div class="util-result-label">1. 金額千分位與中文翻譯（支援複製）</div>
             <div class="util-row">
-                <input type="text" id="comma-input" class="util-input" placeholder="貼上或輸入純數字..." oninput="formatCommaNum()">
-                <button class="util-btn" onclick="copyCommaNum()">📋 複製</button>
+                <input type="text" id="comma-input" class="util-input" placeholder="直接貼上純數字..." oninput="formatCommaNum()">
+                <button class="util-btn" onclick="copyCommaNum()">📋 複製數字</button>
             </div>
+            <div id="chinese-num-box" class="chinese-num-preview">💡 字幕提示：請在上方輸入金額數字</div>
 
-            <!-- 功能二：對帳差異計算機 -->
             <div class="util-result-label">2. 兩數查核絕對差異值</div>
             <div class="util-row">
                 <input type="number" id="diff-a" class="util-input" placeholder="數字 A" oninput="calcDifference()">
                 <input type="number" id="diff-b" class="util-input" placeholder="數字 B" oninput="calcDifference()">
-                <div id="diff-output" style="font-size: 0.85rem; font-weight:700; color:#f43f5e; display:flex; align-items:center; min-width:60px; justify-content:center;">Δ: 0</div>
+                <div id="diff-output">Δ: 0</div>
             </div>
 
-            <!-- 功能三：點擊續命語錄 -->
             <div class="util-result-label">3. 查核心態續命語錄 (點擊切換)</div>
             <div id="quote-box" class="quote-shifter" onclick="shiftAuditQuote()">
                 「沒事的，平不了就找經理，總會有辦法的… 🐱」
             </div>
         </div>
 
-        <!-- 第一層：部隊編制切換 -->
         <div class="level-selector">
             <button class="level-btn active" id="lvl-ic" onclick="switchLevel('ic')">指揮官 吉伊 🐹</button>
             <button class="level-btn" id="lvl-staff" onclick="switchLevel('staff')">突擊前線 (Staff)</button>
@@ -610,7 +630,6 @@
             <button class="level-btn" id="lvl-partner" onclick="switchLevel('partner')">最高統帥 🌰</button>
         </div>
 
-        <!-- 第二層：突擊前線部隊代號 -->
         <div class="staff-sub-selector" id="staff-sub-box" style="display: none;">
             <button class="staff-btn active" data-staff="usagi" onclick="switchStaff('usagi')"><span>🐰</span><span>兔兔隊員</span></button>
             <button class="staff-btn" data-staff="hachiware" onclick="switchStaff('hachiware')"><span>🐱</span><span>小八隊員</span></button>
@@ -618,7 +637,6 @@
             <button class="staff-btn" data-staff="kuhon" onclick="switchStaff('kuhon')"><span>🐷</span><span>古本屋隊員</span></button>
         </div>
 
-        <!-- 全體聯合作戰總進度條 -->
         <div class="progress-container">
             <div class="progress-text-row">
                 <span id="progress-role-label">🌍 全體特工聯合作戰總進度</span>
@@ -629,22 +647,18 @@
             </div>
         </div>
 
-        <!-- 各自待完成事項頒布區 -->
         <div class="input-section">
             <input type="text" id="todo-input" placeholder="新增當前角色的待完成任務..." onkeypress="handleKeyPress(event)">
             <button class="add-btn" onclick="addTodo()">新增</button>
         </div>
 
-        <!-- 行動任務清單 -->
         <div class="todo-list" id="todo-list"></div>
 
-        <!-- 強制撤離登出 -->
         <div class="logout-section">
             <button class="logout-btn" id="shutdown-btn" onclick="triggerShutdown()">🔒 請先消除此角色的所有威脅以解鎖撤離</button>
         </div>
     </div>
 
-    <!-- 行動回報彈出視窗 -->
     <div id="overlay" class="overlay">
         <div class="modal">
             <h2 style="color: #34d399; margin-top:0; font-weight: 800;">💥 TACTICAL CLEAR</h2>
@@ -669,249 +683,4 @@
             "ic": { name: "指揮官 吉伊卡哇 🐹", done: "哇…（流淚）！所得稅與現金流量表全數平齊！指揮官今晚頂住死線壓力，全體安全撤離，立刻躲進被窩強制斷電！" },
             "staff_usagi": { name: "突擊特工 兔兔 🐰", done: "烏拉！！！呀哈！！！兔兔特工以風捲快速解決了所有底稿！現在立刻拋下武器，全速奔跑回家強制關機！" },
             "staff_hachiware": { name: "醫護特工 小八貓 🐱", done: "「總會有辦法的！」小八隊員任務全數歸零，快放下滑鼠，喝碗熱湯好好睡一覺吧！" },
-            "staff_mome": { name: "偽裝特工 小桃鼠 🐿️", done: "哼哼～小桃特工出馬，沒有搞不定的底稿！本少爺現在下達最高指令：立刻撤離下班，強制關機！" },
-            "staff_kuhon": { name: "後勤特工 古本屋 🐷", done: "防線整理完畢！古本屋隊員默默把所有底稿歸檔得完美無瑕！辛苦了，快強制斷電休息去！" },
-            "manager": { name: "戰術參謀 經理 🐰", done: "經理參謀辛苦了！防線防守成功，Q2 風暴順利解除，現在馬上跟著兔兔隊員一起快樂斷電下班！" },
-            "partner": { name: "最高統帥 栗子饅頭 🌰", done: "哈啊——！（吐氣）報告簽核完畢！今晚最完美的特工配置就是立刻撤離，回去享受大叔般的深夜安穩睡眠！" }
-        };
-
-        const foodDatabase = {
-            lunch: [
-                "🏪 7-11（極速應援！便當/御飯糰/關東煮）", "🏪 全家（便利續命！夯番薯/微波義大利麵）",
-                "🍜 熱騰騰雞塊麵（辦公室最抗壓的邪惡組合）", "🍢 罪惡大滷味（自由挑選，加辣破壞疲勞）",
-                "🥗 少油低卡健康餐盒（維持高強度作戰腦力）", "🍛 濃郁系咖哩飯（查核空檔的精神支柱）",
-                "🥟 爆汁鍋貼水餃（快狠準高熱量方案）", "🍱 經典排骨/雞腿便當（應付爆肝下午的熱量地基）",
-                "🍔 美式漢堡炸雞套餐（死線前的靈魂救贖）", "🍣 壽司生魚片丼飯（清爽避免下午打瞌睡）",
-                "🍜 日式拉麵/烏龍麵（溫暖被查核折磨的胃）", "🍲 台式個人小火鍋（深夜民生東路小確幸）"
-            ],
-            drink: [
-                "🧋 50嵐（經典 1 號四季春珍波椰）", "🥤 得正 Oolong Tea（烘焙烏龍加嫩仙草/茶凍）",
-                "🧋 可不可熟成紅茶（熟成歐蕾，內耗數字靈藥）", "🍵 烏弄 UNOCHA（金萱冬片無糖加杏仁凍）",
-                "🍼 約翰紅茶公司（煮濃那鐵，頂級乳香治癒心靈）", "🍇 麻古茶坊（高山金萱茶/芝芝果粒大暴走）",
-                "🥛 迷客夏 Milksha（珍珠手炒黑糖鮮奶）", "🍼 五桐號 WooTea（五桐茶加杏仁凍/青茶凍）"
-            ]
-        };
-
-        // 📋 續命語錄資料庫
-        const auditQuotes = [
-            "「沒事的，差幾塊錢平不了就找經理，總會有辦法的… 🐱」",
-            "「烏拉！呀哈！沒有一個底稿能熬過今晚的兔兔突擊！ 🐰」",
-            "「哈啊——（哈一口氣）！這份DTA調得好，今晚值得喝一杯！ 🌰」",
-            "「放平心態。如果客戶不給憑證，那是他的造化，不是你的問題。 🧘」",
-            "「對不齊的現金流量表，就像變了心的前任，再怎麼強求也是有差。 💔」",
-            "「只要我的手速夠快，經理的 Note 就追不上我！ ⚡」"
-        ];
-
-        let currentLevel = localStorage.getItem("tg_lvl") || "ic"; 
-        let currentStaff = localStorage.getItem("tg_stf") || "usagi"; 
-        let allTodos = JSON.parse(localStorage.getItem("tg_todos_v7")) || {};
-
-        function getActiveKey() {
-            return currentLevel === "staff" ? `staff_${currentStaff}` : currentLevel;
-        }
-
-        if (Object.keys(allTodos).length === 0) {
-            Object.keys(defaultTasks).forEach(k => {
-                allTodos[k] = defaultTasks[k].map(t => ({ text: t, progress: 0 }));
-            });
-        }
-
-        // 🛠️ 實用工具一：千分位極速轉換
-        function formatCommaNum() {
-            const inputEl = document.getElementById("comma-input");
-            let val = inputEl.value.replace(/,/g, '').trim();
-            if (val === "" || isNaN(val)) return;
-            
-            let parts = val.split('.');
-            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            inputEl.value = parts.join('.');
-        }
-
-        function copyCommaNum() {
-            const inputEl = document.getElementById("comma-input");
-            if (inputEl.value.trim() !== "") {
-                navigator.clipboard.writeText(inputEl.value);
-                alert("📋 千分位數字已成功複製到剪貼簿！");
-            }
-        }
-
-        // 🛠️ 實用工具二：差異計算機
-        function calcDifference() {
-            const a = parseFloat(document.getElementById("diff-a").value) || 0;
-            const b = parseFloat(document.getElementById("diff-b").value) || 0;
-            const diff = Math.abs(a - b);
-            // 格式化輸出差異值
-            document.getElementById("diff-output").innerText = `Δ: ${diff.toLocaleString('en-US', {maximumFractionDigits: 2})}`;
-        }
-
-        // 🛠️ 實用工具三：續命語錄切換
-        function shiftAuditQuote() {
-            const box = document.getElementById("quote-box");
-            const currentText = box.innerText;
-            let nextQuote = auditQuotes[Math.floor(Math.random() * auditQuotes.length)];
-            while (nextQuote === currentText) {
-                nextQuote = auditQuotes[Math.floor(Math.random() * auditQuotes.length)];
-            }
-            box.innerText = nextQuote;
-        }
-
-        function switchLevel(lvl) {
-            currentLevel = lvl;
-            localStorage.setItem("tg_lvl", lvl);
-            document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
-            document.getElementById(`lvl-${lvl}`).classList.add("active");
-
-            const staffBox = document.getElementById("staff-sub-box");
-            staffBox.style.display = (lvl === "staff") ? "flex" : "none";
-            render();
-        }
-
-        function switchStaff(stf) {
-            currentStaff = stf;
-            localStorage.setItem("tg_stf", stf);
-            document.querySelectorAll(".staff-btn").forEach(b => b.classList.remove("active"));
-            const btn = document.querySelector(`.staff-btn[data-staff="${stf}"]`);
-            if (btn) btn.classList.add("active");
-            render();
-        }
-
-        function updateProgress() {
-            let totalScore = 0;
-            let maxPossibleScore = 0;
-            let activeCompleted = true;
-            let activeTaskCount = 0;
-
-            const activeKey = getActiveKey();
-
-            Object.keys(allTodos).forEach(k => {
-                allTodos[k].forEach(t => {
-                    totalScore += t.progress;
-                    maxPossibleScore += 100;
-
-                    if (k === activeKey) {
-                        activeTaskCount++;
-                        if (t.progress < 100) {
-                            activeCompleted = false;
-                        }
-                    }
-                });
-            });
-
-            const totalPct = maxPossibleScore === 0 ? 0 : Math.round((totalScore / maxPossibleScore) * 100);
-            document.getElementById("progress-percent").innerText = `${totalPct}%`;
-            document.getElementById("progress-fill").style.width = `${totalPct}%`;
-
-            const btn = document.getElementById("shutdown-btn");
-            if (activeCompleted && activeTaskCount > 0) {
-                btn.classList.add("ready");
-                btn.innerText = `💥 [${roleMeta[activeKey].name.split(' ')[1]}] 任務全清空！安全撤離解鎖`;
-                btn.disabled = false;
-            } else {
-                btn.classList.remove("ready");
-                btn.innerText = `🔒 請先消除此角色的所有威脅以解鎖撤離`;
-                btn.disabled = true;
-            }
-        }
-
-        function render() {
-            const key = getActiveKey();
-            const listEl = document.getElementById("todo-list");
-            listEl.innerHTML = "";
-            const list = allTodos[key] || [];
-
-            list.forEach((todo, idx) => {
-                const item = document.createElement("div");
-                const isDone = todo.progress === 100;
-                item.className = `todo-item ${isDone ? 'completed-card' : ''}`;
-                
-                let badgeText = "未開始";
-                if (todo.progress === 33) badgeText = "進行中";
-                if (todo.progress === 66) badgeText = "覆核中";
-                if (todo.progress === 100) badgeText = "已攻克";
-
-                item.innerHTML = `
-                    <div class="todo-top-row">
-                        <div class="todo-left" onclick="cycleProgress(${idx})">
-                            <span class="status-badge status-${todo.progress}">${badgeText}</span>
-                            <div class="todo-text">${todo.text}</div>
-                        </div>
-                        <button class="delete-btn" onclick="deleteTodo(${idx})">✕</button>
-                    </div>
-                    <div class="todo-mini-progress-box">
-                        <div class="todo-mini-bg">
-                            <div class="todo-mini-fill fill-${todo.progress}"></div>
-                        </div>
-                        <span style="font-size: 0.7rem; font-weight: 700; color: var(--text-sub); width: 28px; text-align: right;">${todo.progress}%</span>
-                    </div>
-                `;
-                listEl.appendChild(item);
-            });
-
-            localStorage.setItem("tg_todos_v7", JSON.stringify(allTodos));
-            updateProgress();
-        }
-
-        function cycleProgress(idx) {
-            const key = getActiveKey();
-            let current = allTodos[key][idx].progress || 0;
-            if (current === 0) current = 33;
-            else if (current === 33) current = 66;
-            else if (current === 66) current = 100;
-            else current = 0;
-            
-            allTodos[key][idx].progress = current;
-            render();
-        }
-
-        function addTodo() {
-            const input = document.getElementById("todo-input");
-            const text = input.value.trim();
-            if (text) {
-                const key = getActiveKey();
-                allTodos[key].unshift({ text: text, progress: 0 });
-                input.value = "";
-                render();
-            }
-        }
-
-        function handleKeyPress(e) { if (e.key === "Enter") addTodo(); }
-        function deleteTodo(idx) { const key = getActiveKey(); allTodos[key].splice(idx, 1); render(); }
-
-        function getRandomFood(type) {
-            const list = foodDatabase[type];
-            const res = list[Math.floor(Math.random() * list.length)];
-            const el = document.getElementById("food-result");
-            el.style.display = "block";
-            el.innerHTML = type === 'lunch' ? `📦 <b>今日集體午餐雷達：</b><br>${res}` : `🥤 <b>今日集體下午茶雷達：</b><br>${res}`;
-        }
-
-        function updateCountdown() {
-            const target = new Date("2026-08-14T00:00:00+08:00");
-            const diff = target - new Date();
-            if (diff <= 0) {
-                document.getElementById("countdown-display").innerText = "💥 ACTION COMPLETE // 突擊日已到，全員撤離！";
-                return;
-            }
-            const d = Math.floor(diff / 86400000);
-            const h = Math.floor((diff % 86400000) / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            document.getElementById("countdown-display").innerText = `⏳ 距離 8/14 死線決戰：${d} 天 ${h} 小時 ${m} 分`;
-        }
-
-        function triggerShutdown() {
-            const key = getActiveKey();
-            document.getElementById("modal-title").innerText = `💥 代號 [${roleMeta[key].name}] 戰線全面清空！`;
-            document.getElementById("modal-quote").innerText = roleMeta[key].done;
-            document.getElementById("overlay").style.display = "flex";
-        }
-        function closeModal() { document.getElementById("overlay").style.display = "none"; }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            switchLevel(currentLevel);
-            if (currentLevel === "staff") switchStaff(currentStaff);
-            setInterval(updateCountdown, 60000);
-            updateCountdown();
-        });
-    </script>
-</body>
-</html>
+            "
