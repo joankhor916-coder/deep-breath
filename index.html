@@ -134,72 +134,82 @@
             animation: fadeIn 0.3s ease;
         }
 
-        /* 🎮 紓壓趣味小遊戲專區 */
-        .game-box {
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
+        /* 🛠️ 新增：特工查核實用工具箱 */
+        .utility-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.25);
             border-radius: 20px;
             padding: 14px;
             margin-bottom: 16px;
-            text-align: center;
             box-shadow: var(--panel-shadow);
         }
 
-        .game-title {
+        .util-title {
             font-size: 0.85rem;
             font-weight: 800;
-            color: #c7d2fe;
-            margin-bottom: 8px;
+            color: #93c5fd;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 6px;
         }
 
-        .game-screen {
-            background: #0b1329;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 16px 10px;
-            min-height: 50px;
+        .util-row {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            gap: 8px;
             margin-bottom: 10px;
         }
 
-        .game-target {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--terminal-red);
-            animation: pulse 0.5s infinite alternate;
-            word-break: break-all;
+        .util-input {
+            flex: 1;
+            background: #0b1329;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px 10px;
+            color: #fff;
+            font-size: 0.85rem;
+            outline: none;
+        }
+        .util-input:focus {
+            border-color: #60a5fa;
         }
 
-        .game-stats {
-            font-size: 0.8rem;
-            color: #818cf8;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-        .game-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        .util-btn {
+            background: #2563eb;
             border: none;
             color: #fff;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 0.9rem;
+            padding: 0 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-            transition: all 0.1s ease;
+            white-space: nowrap;
         }
-        .game-btn:active {
-            transform: scale(0.98);
-            filter: brightness(1.1);
+        .util-btn:hover { background: #3b82f6; }
+
+        .util-result-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            padding-left: 2px;
+        }
+
+        /* 心態續命專區 */
+        .quote-shifter {
+            background: rgba(11, 19, 43, 0.6);
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            border-left: 3px solid #60a5fa;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .quote-shifter:hover {
+            background: rgba(11, 19, 43, 0.9);
         }
 
         /* 第一層：部隊編制切換 */
@@ -397,7 +407,6 @@
             cursor: pointer;
         }
 
-        /* 狀態徽章 */
         .status-badge {
             font-size: 0.7rem;
             padding: 2px 8px;
@@ -547,11 +556,6 @@
             from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        @keyframes pulse {
-            from { transform: scale(1); opacity: 0.9; }
-            to { transform: scale(1.03); opacity: 1; }
-        }
     </style>
 </head>
 <body>
@@ -572,14 +576,30 @@
             <div id="food-result" class="food-result-display"></div>
         </div>
 
-        <!-- 🎮 紓壓解悶遊戲艙 -->
-        <div class="game-box">
-            <div class="game-title">🎮 戰術防線 // 暴打底稿紓壓艙</div>
-            <div class="game-screen">
-                <div id="game-text" class="game-target">READY PLAYER ONE</div>
-                <div id="game-status" class="game-stats">查核壓力過大？點擊下方開始作戰！</div>
+        <!-- 🛠️ 查核特工實用急救包 -->
+        <div class="utility-box">
+            <div class="util-title">🛠️ 特工查核前線急救包</div>
+            
+            <!-- 功能一：千分位極速轉換 -->
+            <div class="util-result-label">1. 千分位格式化 (輸入數字自動轉換)</div>
+            <div class="util-row">
+                <input type="text" id="comma-input" class="util-input" placeholder="貼上或輸入純數字..." oninput="formatCommaNum()">
+                <button class="util-btn" onclick="copyCommaNum()">📋 複製</button>
             </div>
-            <button id="game-action-btn" class="game-btn" onclick="handleGameClick()">⚡ 開始暴打大作戰</button>
+
+            <!-- 功能二：對帳差異計算機 -->
+            <div class="util-result-label">2. 兩數查核絕對差異值</div>
+            <div class="util-row">
+                <input type="number" id="diff-a" class="util-input" placeholder="數字 A" oninput="calcDifference()">
+                <input type="number" id="diff-b" class="util-input" placeholder="數字 B" oninput="calcDifference()">
+                <div id="diff-output" style="font-size: 0.85rem; font-weight:700; color:#f43f5e; display:flex; align-items:center; min-width:60px; justify-content:center;">Δ: 0</div>
+            </div>
+
+            <!-- 功能三：點擊續命語錄 -->
+            <div class="util-result-label">3. 查核心態續命語錄 (點擊切換)</div>
+            <div id="quote-box" class="quote-shifter" onclick="shiftAuditQuote()">
+                「沒事的，平不了就找經理，總會有辦法的… 🐱」
+            </div>
         </div>
 
         <!-- 第一層：部隊編制切換 -->
@@ -672,22 +692,16 @@
             ]
         };
 
-        // 🎮 小遊戲資料庫
-        const gameBugs = [
-            "💥 💥 💥 討厭的 DTA 算錯啦！",
-            "💣 💣 💣 現金流量表又不平了！",
-            "🔥 🔥 🔥 經理又下了一百個 Note！",
-            "💀 💀 💀 客戶塞了一堆廢紙當憑證！
-            "🥊 🥊 🥊 討厭的合併報表沖銷！",
-            "⚡ ⚡ ⚡ 系統快要斷線啦！"
-        ];
-        const gameRankings = [
-            "🐹 吉伊卡哇評價：哇…哇…！（嚇哭）但你太強了！擊碎了大量查核屏障！",
-            "🐰 兔兔評價：烏拉！呀哈！呀——哈！！你把底稿全部撕碎了！",
-            "🌰 栗子大叔評價：哈啊——（灌一口啤酒）！這手速夠格陪我熬夜！"
+        // 📋 續命語錄資料庫
+        const auditQuotes = [
+            "「沒事的，差幾塊錢平不了就找經理，總會有辦法的… 🐱」",
+            "「烏拉！呀哈！沒有一個底稿能熬過今晚的兔兔突擊！ 🐰」",
+            "「哈啊——（哈一口氣）！這份DTA調得好，今晚值得喝一杯！ 🌰」",
+            "「放平心態。如果客戶不給憑證，那是他的造化，不是你的問題。 🧘」",
+            "「對不齊的現金流量表，就像變了心的前任，再怎麼強求也是有差。 💔」",
+            "「只要我的手速夠快，經理的 Note 就追不上我！ ⚡」"
         ];
 
-        let gameState = { active: false, score: 0, timeLeft: 10, timer: null };
         let currentLevel = localStorage.getItem("tg_lvl") || "ic"; 
         let currentStaff = localStorage.getItem("tg_stf") || "usagi"; 
         let allTodos = JSON.parse(localStorage.getItem("tg_todos_v7")) || {};
@@ -702,46 +716,43 @@
             });
         }
 
-        // 🎮 紓壓遊戲邏輯區
-        function handleGameClick() {
-            const btn = document.getElementById("game-action-btn");
-            const textEl = document.getElementById("game-text");
-            const statusEl = document.getElementById("game-status");
+        // 🛠️ 實用工具一：千分位極速轉換
+        function formatCommaNum() {
+            const inputEl = document.getElementById("comma-input");
+            let val = inputEl.value.replace(/,/g, '').trim();
+            if (val === "" || isNaN(val)) return;
+            
+            let parts = val.split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            inputEl.value = parts.join('.');
+        }
 
-            if (!gameState.active) {
-                // 開始遊戲
-                gameState.active = true;
-                gameState.score = 0;
-                gameState.timeLeft = 10;
-                btn.innerText = "🥊 集中火力！用力猛擊！！";
-                textEl.innerText = gameBugs[Math.floor(Math.random() * gameBugs.length)];
-                statusEl.innerText = `⏱️ 剩餘時間: ${gameState.timeLeft}s | 🔥 COMBO: 0`;
-
-                gameState.timer = setInterval(() => {
-                    gameState.timeLeft--;
-                    if (gameState.timeLeft <= 0) {
-                        // 遊戲結束
-                        clearInterval(gameState.timer);
-                        gameState.active = false;
-                        btn.innerText = "⚡ 再戰一輪紓壓";
-                        textEl.innerText = `🏆 最終戰績：${gameState.score} 連擊！`;
-                        
-                        let rank = gameRankings[0];
-                        if (gameState.score > 25) rank = gameRankings[1];
-                        if (gameState.score > 45) rank = gameRankings[2];
-                        statusEl.innerText = rank;
-                    } else {
-                        statusEl.innerText = `⏱️ 剩餘時間: ${gameState.timeLeft}s | 🔥 COMBO: ${gameState.score}`;
-                    }
-                }, 100);
-            } else {
-                // 遊戲進行中點擊：得分、切換隨機崩潰句
-                gameState.score++;
-                if (gameState.score % 4 === 0) {
-                    textEl.innerText = gameBugs[Math.floor(Math.random() * gameBugs.length)];
-                }
-                statusEl.innerText = `⏱️ 剩餘時間: ${gameState.timeLeft}s | 🔥 COMBO: ${gameState.score}`;
+        function copyCommaNum() {
+            const inputEl = document.getElementById("comma-input");
+            if (inputEl.value.trim() !== "") {
+                navigator.clipboard.writeText(inputEl.value);
+                alert("📋 千分位數字已成功複製到剪貼簿！");
             }
+        }
+
+        // 🛠️ 實用工具二：差異計算機
+        function calcDifference() {
+            const a = parseFloat(document.getElementById("diff-a").value) || 0;
+            const b = parseFloat(document.getElementById("diff-b").value) || 0;
+            const diff = Math.abs(a - b);
+            // 格式化輸出差異值
+            document.getElementById("diff-output").innerText = `Δ: ${diff.toLocaleString('en-US', {maximumFractionDigits: 2})}`;
+        }
+
+        // 🛠️ 實用工具三：續命語錄切換
+        function shiftAuditQuote() {
+            const box = document.getElementById("quote-box");
+            const currentText = box.innerText;
+            let nextQuote = auditQuotes[Math.floor(Math.random() * auditQuotes.length)];
+            while (nextQuote === currentText) {
+                nextQuote = auditQuotes[Math.floor(Math.random() * auditQuotes.length)];
+            }
+            box.innerText = nextQuote;
         }
 
         function switchLevel(lvl) {
