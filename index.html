@@ -91,7 +91,7 @@
             border: 1px solid var(--border-color);
             border-radius: 20px;
             padding: 14px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             box-shadow: var(--panel-shadow);
@@ -132,6 +132,74 @@
             border-left: 4px solid var(--esun-green);
             line-height: 1.5;
             animation: fadeIn 0.3s ease;
+        }
+
+        /* 🎮 紓壓趣味小遊戲專區 */
+        .game-box {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 20px;
+            padding: 14px;
+            margin-bottom: 16px;
+            text-align: center;
+            box-shadow: var(--panel-shadow);
+        }
+
+        .game-title {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #c7d2fe;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .game-screen {
+            background: #0b1329;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px 10px;
+            min-height: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .game-target {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--terminal-red);
+            animation: pulse 0.5s infinite alternate;
+            word-break: break-all;
+        }
+
+        .game-stats {
+            font-size: 0.8rem;
+            color: #818cf8;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .game-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            border: none;
+            color: #fff;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all 0.1s ease;
+        }
+        .game-btn:active {
+            transform: scale(0.98);
+            filter: brightness(1.1);
         }
 
         /* 第一層：部隊編制切換 */
@@ -205,7 +273,7 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
-        /* 頂部大進度條（改為全體總戰略進度） */
+        /* 全體聯合作戰總進度條 */
         .progress-container {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -297,7 +365,6 @@
             margin-bottom: 30px;
         }
 
-        /* 改造：卡片式待辦任務，自帶專屬小進度條 */
         .todo-item {
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.06);
@@ -352,7 +419,6 @@
             transition: color 0.2s;
         }
 
-        /* 專屬任務微型進度條系統 */
         .todo-mini-progress-box {
             width: 100%;
             display: flex;
@@ -481,6 +547,11 @@
             from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        @keyframes pulse {
+            from { transform: scale(1); opacity: 0.9; }
+            to { transform: scale(1.03); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -499,6 +570,16 @@
                 <button class="food-action-btn" onclick="getRandomFood('drink')">🥤 集體下午茶點啥？</button>
             </div>
             <div id="food-result" class="food-result-display"></div>
+        </div>
+
+        <!-- 🎮 紓壓解悶遊戲艙 -->
+        <div class="game-box">
+            <div class="game-title">🎮 戰術防線 // 暴打底稿紓壓艙</div>
+            <div class="game-screen">
+                <div id="game-text" class="game-target">READY PLAYER ONE</div>
+                <div id="game-status" class="game-stats">查核壓力過大？點擊下方開始作戰！</div>
+            </div>
+            <button id="game-action-btn" class="game-btn" onclick="handleGameClick()">⚡ 開始暴打大作戰</button>
         </div>
 
         <!-- 第一層：部隊編制切換 -->
@@ -539,7 +620,7 @@
 
         <!-- 強制撤離登出 -->
         <div class="logout-section">
-            <button class="logout-btn" id="shutdown-btn" onclick="triggerShutdown()">🔒 解鎖安全關機撤離 (0%)</button>
+            <button class="logout-btn" id="shutdown-btn" onclick="triggerShutdown()">🔒 請先消除此角色的所有威脅以解鎖撤離</button>
         </div>
     </div>
 
@@ -554,7 +635,6 @@
     </div>
 
     <script>
-        // 特工行動原始設定集 (進度值改為：0, 33, 66, 100)
         const defaultTasks = {
             "ic": ["[⚔️核心突擊] 攻克大魔王所得稅，要怎麼調DTA/DTL", "[⚔️關鍵防線] 編製現金流量表，這科目怎麼還是有差啊", "[📡戰術指揮] 監控Staff特工部隊的查核進度"],
             "staff_usagi": ["[🐰銀行合併] 三家子公司沖銷=認準顏色分啊分", "[🐰創投] 都這做了一年了，「呀哈！」這簡單啦"],
@@ -575,7 +655,6 @@
             "partner": { name: "最高統帥 栗子饅頭 🌰", done: "哈啊——！（吐氣）報告簽核完畢！今晚最完美的特工配置就是立刻撤離，回去享受大叔般的深夜安穩睡眠！" }
         };
 
-        // 戰地物資庫
         const foodDatabase = {
             lunch: [
                 "🏪 7-11（極速應援！便當/御飯糰/關東煮）", "🏪 全家（便利續命！夯番薯/微波義大利麵）",
@@ -593,21 +672,76 @@
             ]
         };
 
+        // 🎮 小遊戲資料庫
+        const gameBugs = [
+            "💥 💥 💥 討厭的 DTA 算錯啦！",
+            "💣 💣 💣 現金流量表又不平了！",
+            "🔥 🔥 🔥 經理又下了一百個 Note！",
+            "💀 💀 💀 客戶塞了一堆廢紙當憑證！
+            "🥊 🥊 🥊 討厭的合併報表沖銷！",
+            "⚡ ⚡ ⚡ 系統快要斷線啦！"
+        ];
+        const gameRankings = [
+            "🐹 吉伊卡哇評價：哇…哇…！（嚇哭）但你太強了！擊碎了大量查核屏障！",
+            "🐰 兔兔評價：烏拉！呀哈！呀——哈！！你把底稿全部撕碎了！",
+            "🌰 栗子大叔評價：哈啊——（灌一口啤酒）！這手速夠格陪我熬夜！"
+        ];
+
+        let gameState = { active: false, score: 0, timeLeft: 10, timer: null };
         let currentLevel = localStorage.getItem("tg_lvl") || "ic"; 
         let currentStaff = localStorage.getItem("tg_stf") || "usagi"; 
-        
-        // 注意：資料結構升級為帶有進度分數 (progress: 0 | 33 | 66 | 100)
         let allTodos = JSON.parse(localStorage.getItem("tg_todos_v7")) || {};
 
         function getActiveKey() {
             return currentLevel === "staff" ? `staff_${currentStaff}` : currentLevel;
         }
 
-        // 初始化資料
         if (Object.keys(allTodos).length === 0) {
             Object.keys(defaultTasks).forEach(k => {
                 allTodos[k] = defaultTasks[k].map(t => ({ text: t, progress: 0 }));
             });
+        }
+
+        // 🎮 紓壓遊戲邏輯區
+        function handleGameClick() {
+            const btn = document.getElementById("game-action-btn");
+            const textEl = document.getElementById("game-text");
+            const statusEl = document.getElementById("game-status");
+
+            if (!gameState.active) {
+                // 開始遊戲
+                gameState.active = true;
+                gameState.score = 0;
+                gameState.timeLeft = 10;
+                btn.innerText = "🥊 集中火力！用力猛擊！！";
+                textEl.innerText = gameBugs[Math.floor(Math.random() * gameBugs.length)];
+                statusEl.innerText = `⏱️ 剩餘時間: ${gameState.timeLeft}s | 🔥 COMBO: 0`;
+
+                gameState.timer = setInterval(() => {
+                    gameState.timeLeft--;
+                    if (gameState.timeLeft <= 0) {
+                        // 遊戲結束
+                        clearInterval(gameState.timer);
+                        gameState.active = false;
+                        btn.innerText = "⚡ 再戰一輪紓壓";
+                        textEl.innerText = `🏆 最終戰績：${gameState.score} 連擊！`;
+                        
+                        let rank = gameRankings[0];
+                        if (gameState.score > 25) rank = gameRankings[1];
+                        if (gameState.score > 45) rank = gameRankings[2];
+                        statusEl.innerText = rank;
+                    } else {
+                        statusEl.innerText = `⏱️ 剩餘時間: ${gameState.timeLeft}s | 🔥 COMBO: ${gameState.score}`;
+                    }
+                }, 100);
+            } else {
+                // 遊戲進行中點擊：得分、切換隨機崩潰句
+                gameState.score++;
+                if (gameState.score % 4 === 0) {
+                    textEl.innerText = gameBugs[Math.floor(Math.random() * gameBugs.length)];
+                }
+                statusEl.innerText = `⏱️ 剩餘時間: ${gameState.timeLeft}s | 🔥 COMBO: ${gameState.score}`;
+            }
         }
 
         function switchLevel(lvl) {
@@ -630,7 +764,6 @@
             render();
         }
 
-        // 計算全體總進度與當前角色狀況
         function updateProgress() {
             let totalScore = 0;
             let maxPossibleScore = 0;
@@ -653,13 +786,10 @@
                 });
             });
 
-            // 計算全體總完成率
             const totalPct = maxPossibleScore === 0 ? 0 : Math.round((totalScore / maxPossibleScore) * 100);
-            
             document.getElementById("progress-percent").innerText = `${totalPct}%`;
             document.getElementById("progress-fill").style.width = `${totalPct}%`;
 
-            // 當前選定角色的撤離按鈕狀況
             const btn = document.getElementById("shutdown-btn");
             if (activeCompleted && activeTaskCount > 0) {
                 btn.classList.add("ready");
@@ -683,7 +813,6 @@
                 const isDone = todo.progress === 100;
                 item.className = `todo-item ${isDone ? 'completed-card' : ''}`;
                 
-                // 根據進度顯示不同的文字徽章
                 let badgeText = "未開始";
                 if (todo.progress === 33) badgeText = "進行中";
                 if (todo.progress === 66) badgeText = "覆核中";
@@ -711,7 +840,6 @@
             updateProgress();
         }
 
-        // 點擊卡片循環切換進度：0% -> 33% -> 66% -> 100% -> 0%
         function cycleProgress(idx) {
             const key = getActiveKey();
             let current = allTodos[key][idx].progress || 0;
